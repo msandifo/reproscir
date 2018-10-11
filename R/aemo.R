@@ -96,6 +96,14 @@ get_aemo_data<- function(local.path=NULL, state="NSW", files=NULL) {
 
 
 
+#' Title
+#'
+#' @param local.path
+#'
+#' @return
+#' @export
+#'
+#' @examples
 download_gasbb <- function(local.path=NULL){
   local.path=validate_directory(local.path, folder="gasbb")
   local.file <- paste0(local.path,"/ActualFlows.zip")
@@ -105,6 +113,14 @@ download_gasbb <- function(local.path=NULL){
   return(local.file)
 }
 
+#' Title
+#'
+#' @param file.name
+#'
+#' @return
+#' @export
+#'
+#' @examples
 read_gasbb <- function(file.name){
   readr::read_csv(file.name ) %>%
     janitor::clean_names(case="snake") %>%
@@ -112,6 +128,15 @@ read_gasbb <- function(file.name){
 
 }
 
+#' Title
+#'
+#' @param df
+#' @param zone
+#'
+#' @return
+#' @export
+#'
+#' @examples
 group_gasbb <-function(df, zone="Roma"){
    df %>%
     subset(stringr::str_detect(zonename, zone) & flowdirection=="DELIVERY") %>%
