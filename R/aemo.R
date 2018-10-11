@@ -120,5 +120,3 @@ group_gasbb <-function(df, zone="Roma"){
 
 }
 
-gasbb <-download_gasbb() %>% read_gasbb( )
-ggplot(gasbb %>% group_gasbb(), aes(gasdate, actualquantity*24*60*60/1e6))+geom_line()
