@@ -93,3 +93,32 @@ get_aemo_data<- function(local.path=NULL, state="NSW", files=NULL) {
   dt %>% subset(year<=lubridate::year(Sys.Date()) & year >= 2007 ) #nb. checks for errors with POSIXCt translation
 }
 
+
+
+
+download_gasbb <- function(local.path=NULL){
+  local.path=validate_directory(local.path, folder="gasbb")
+  local.file <- paste0(local.path,"/ActualFlows.zip")
+  if (!file.exists(local.file))
+  utils::download.file("https://www.aemo.com.au/-/media/Files/Gas/Natural_Gas_Services_Bulletin_Board/2018/GBB-2018-Docs/Archived-Data/ActualFlows.zip",
+  local.file)
+  return(local.file)
+}
+
+read_gasbb <- function(file.name){
+  readr::read_csv(file.name ) %>%
+    janitor::clean_names(case="snake") %>%
+    dplyr::mutate(gasdate= lubridate::dmy(gasdate), lastchanged= lubridate::dmy_hms(lastchanged) )
+
+}
+
+group_gasbb <-function(df, zone="Roma"){
+   df %>%
+    subset(stringr::str_detect(zonename, zone) & flowdirection=="DELIVERY") %>%
+    dplyr::group_by(gasdate)%>%
+    dplyr::summarise(actualquantity= sum(actualquantity) )
+
+}
+
+gasbb <-download_gasbb() %>% read_gasbb( )
+ggplot(gasbb %>% group_gasbb(), aes(gasdate, actualquantity*24*60*60/1e6))+geom_line()
