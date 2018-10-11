@@ -81,8 +81,8 @@ download_aemo_aggregated <- function(states = c("NSW","QLD","SA", "TAS", "VIC"),
 #' @export
 #'
 #' @examples
-get_aemo_data<- function(local.path=NULL, state="NSW", files=NULL) {
-  local.path <- validate_directory(local.path)
+read_aemo_aggregated<- function(local.path=NULL, state="NSW", files=NULL, folder="aemo") {
+  local.path <- validate_directory(local.path, folder=folder)
   my.files<- list.files(local.path)
   if (!is.null(files)) my.files<- my.files[stringr::str_detect(my.files, files)]
   my.files<-paste0(local.path, "/",my.files[stringr::str_detect(my.files,state) ] )
