@@ -9,23 +9,26 @@
 #' @export
 #'
 #' @examples
+#'
 read_gladstone_ports<- function(year=NULL,
                                 month=NULL,
                                 fuel="Liquefied Natural Gas",
                                 country="Total"){
-  args <- as.list(match.call()) # print(exists("args$year"))
+  #args <- as.list(match.call()) #
+
+  # set some defaults
   if (is.null(year)) year <- lubridate::year(Sys.Date())
   if (is.null(month)) {
     current.month <- lubridate::month(Sys.Date())
-    #current month not posted (usually not posted until second week of current month)
+    #note that the GPA does not usiually post prvious month until second week of current month.
 
     if (current.month>1 ) month <- current.month- 1  else  {
-      month=12
+      month=12  #set previous month for year skip
       year<-year-1
     }
   }
   if (month>= 10) yearmonth= paste(year,month, sep="") else
-    yearmonth= paste(year,month, sep="0")
+    yearmonth= paste(year,month, sep="0") #profix months<10 with "0"
   message(paste(fuel,  month.abb[month], year))
   url<-paste0("http://content1.gpcl.com.au/viewcontent/CargoComparisonsSelection/CargoOriginDestination.aspx?View=C&Durat=M&Key=",yearmonth)
   wg <- rvest::html_session(url )
@@ -67,10 +70,14 @@ read_gladstone_ports<- function(year=NULL,
 #' @export
 #'
 #' @examples
-read_gladstone_year <- function(years=2015:lubridate::year(Sys.Date()),fuel="Liquefied Natural Gas", country="Total"){
+read_gladstone_year <- function(years=2015:lubridate::year(Sys.Date()),
+                                fuel="Liquefied Natural Gas",
+                                country="Total"){
   y= rep(years, each=12)
   m= rep(1:12,  length(years))   #l  <- list(y=2016:2017,m=1:2 )
-  my_fun <- function(y,m, fuel="Liquefied Natural Gas", country="Total") read_gladstone_ports(year=y, month=m, fuel=fuel,country = country )
+  my_fun <- function(y,m, fuel="Liquefied Natural Gas", country="Total") {
+    read_gladstone_ports(year=y, month=m, fuel=fuel,country = country )
+  }
   purrr::map2_df(y,m, my_fun,  fuel=fuel, country=country)
 }
 
@@ -90,5 +97,5 @@ update_gladstone <- function(local.path=NULL, years=2015:lubridate::year(Sys.Dat
   if (!file.exists(gladstone.file)) {
     read_gladstone_year(years=years ) -> lng
     save(lng, file=gladstone.file )} else load(gladstone.file)
-  lng
+  lng %>%  subset( !is.na(tonnes))
 }

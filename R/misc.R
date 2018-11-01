@@ -1,6 +1,13 @@
-# copied directly from smapr
-#' @importFrom rappdirs user_cache_dir
+
+#' copied directly from smapr
 #'
+#' @param destination_directory
+#' @param folder
+#'
+#' @return
+#' @export
+#'
+#' @examples
 validate_directory <- function(destination_directory, folder="aemo") {
   if (is.null(destination_directory)) {
     destination_directory <- rappdirs::user_cache_dir(folder)
@@ -41,3 +48,19 @@ reorder_dmy <-function(dates){
   dates[stringr::str_length(dates)==16] <-  stringr::str_c(dates[stringr::str_length(dates)==16], ":00")
   return(dates)
 }
+
+#' sets  day of month in date to day
+#'
+#' @param date date or datetime
+#' @param day numeric
+#'
+#' @return
+#' @export
+#'
+#' @examples
+#' reproscir::set_month_day(lubridate::ymd("2012-01-01"),15)
+#' #"2012-01-15"
+set_month_day <-function(date, day=15) {
+  date+lubridate::days(day-lubridate::mday(date))
+}
+

@@ -4,7 +4,7 @@
 \alias{group_gasbb}
 \title{Title}
 \usage{
-group_gasbb(df, zone = "Roma")
+group_gasbb(df, zone = "Roma", flowdirection = "DELIVERY")
 }
 \arguments{
 \item{zone}{}

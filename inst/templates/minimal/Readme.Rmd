@@ -1,0 +1,112 @@
+---
+title: "003"
+output: github_document
+always_allow_html: yes
+---
+
+```{r setup, include=FALSE}
+
+knitr::opts_chunk$set(echo = FALSE,  message=FALSE, warning=FALSE)
+ 
+drake.path<-"~/Dropbox/msandifo/documents/programming/r/twitter/2018/003/"
+full.repro<-F
+library(reproscir)
+source('./src/settings.R')
+source('./src/theme.R')
+source('./src/functions.R')
+source('./src/plan.R')
+#load(paste0(drake.path, "/data/data.Rdata"))
+source('./src/downloads.R')
+
+```
+ 
+##  Purpose
+
+Brief statement 
+
+## Data Sources
+
+* data source 1
+
+* data soruce 2
+
+ 
+##  Caveats
+
+any preprocesed data sets
+
+## Code
+
+The code base is in ```r``` and is managed  within RStudio, using  the  ```drake```  package, and my ```reoproscir``` package on ```github```.
+
+The code can be executed by opening the ```Rstudio``` project  ```003.Rproj```
+and sourcing ```drake.R```.
+
+```{r echo=T, eval=F}
+source('drake.R')
+```
+Details of the steps invoked by ```drake.R` are summarised below.
+
+* `source('./src/packages.R')` checks for and automatically installs missing package dependencies 
+<!-- ```tidyverse```, ```ggplot2```, ```magrittr```, ```purrr```, ```stringr```, ```drake```, ```lubridate```, ```rvest```, ```rappdirs```,```data.table```, ```fasttime```, ```devtools```, ```wbstats```  -->
+<!--  from cran, and ```hrbrthemes```  and ```reproscir``` from the github repos ```hrbrmstr/hrbrthemes``` and ```msandifo/reproscir``` -->
+
+* `source('./src/settings.R')` sets variables, such as the ```drake.path```, 
+* `source('./src/functions.R')` reads in data processing functions not in ```reproscir``` 
+* `source('./src/theme.R')`  sets the ggplot theme derived from ```hrbrthemes```
+* `source('./src/plots.R')` plot functions    
+* `source('./src/downloads.R')` directs the download of the  relevant data files to be downloaded  into the local directory set by 
+``` local.path```. By default ``` local.path=NULL``` in which case data is downloaded via ```rappdirs::user_cache_dir()``` to a folder in the users cache directory (for macOSX, ```~/Library/cache```) to ```file.path(local.path, aemo)```.   
+
+
+* `source('./src/plan.R')` defines the drake plan ```reproplan``` 
+with the dependency structure
+```{r drake_plan, echo=TRUE, cache=F}
+parasitic.load=12
+source('./src/settings.R')
+source('./src/theme.R')
+source('./src/functions.R')
+source('./src/plots.R')
+source('./src/plan.R')
+drake::make( reproplan )
+config <- drake::drake_config(reproplan)
+graph <- drake::drake_graph_info(config, group = "status", clusters = "imported")
+drake::render_drake_graph(graph, file="figs/rmd_render_drake.png")
+```
+
+<img src="./figs/rmd_render_drake.png" alt="hist1" align="center" style = "border: none; float: center;" width = "1000px">
+
+Note that ```reproplan``` loads the ```./data/data.Rdata``` built by ```./src/downloads.R``` 
+```{r  cache=FALSE}
+print(head(readd(NEM.month)))
+ 
+ 
+* ````source(drake::make( reproplan ))```
+
+
+
+
+* ```source('./src/ouputs.R')```
+output charts  to the ```./figs``` directory :
+
+# ```{r  echo=TRUE, cache=TRUE, eval=F}
+# p003<-drake::readd(p003)
+# ggsave("./figs/p003_01.png",  p003$p1 ,width=8, height=5) 
+# ggsave("./figs/p003_02.png",  p003$p2 ,width=8, height=5) 
+# NEM.month <- drake::readd(NEM.month)
+# gasbb.prod.zone.month <- drake::readd(gasbb.prod.zone.month)
+# gladstone<- drake::readd(gladstone)
+# save( NEM.month , gasbb.prod.zone.month, gladstone,  file = paste0(drake.path,"/data/data.Rdata"))
+#   
+#  ```
+# <img src="./figs/p003_01.png" alt="hist1" align="center" style = "border: none; float: center;" width = "1000px">
+# <img src="./figs/p003_02.png" alt="hist1" align="center" style = "border: none; float: center;" width = "1000px">
+
+ 
+## Code Notes
+
+
+
+
+
+## Errata

@@ -1,0 +1,821 @@
+- name: agage.monthly.MHD.ch4
+  category: climate, ch4, GHG
+  agency: agage
+  link: http://agage.eas.gatech.edu/data_archive/agage/gc-md/monthly/MHD-gcmd_mon.csv
+  directory: ~/data/global/climate/agage/gc-md/monthly/
+  file: MHD-gcmd_mon.csv
+  type:
+    format: csv
+    skip: 15
+    record.names: ~
+    units: ppb
+    date.format: date
+  station:
+    name: Mace Head
+    acronym: MHD
+    country: Ireland
+  r: 'ow<-options("warn"); options(warn =-1); my.data <-read_csv(paste0(my.data.yaml$directory,my.data.yaml$file),
+    skip=my.data.yaml$type$skip, col_types=paste0("diii",str_dup("ddi",9),"dd")) %>%
+    mutate(cdate=ymd(paste0(year,"-",month,"-15" ) )) %>% select(cdate, value = CH4);
+    options(ow); '
+- name: agage.monthly.THD.ch4
+  category: climate, ch4, GHG
+  agency: agage
+  link: http://agage.eas.gatech.edu/data_archive/agage/gc-md/monthly/THD-gcmd_mon.csv
+  directory: ~/data/global/climate/agage/gc-md/monthly/
+  file: THD-gcmd_mon.csv
+  type:
+    format: csv
+    skip: 15
+    record.names: ~
+    units: ppb
+    date.format: date
+  station:
+    name: Trinidad Head
+    acronym: THD
+    country: California
+  r: 'ow<-options("warn"); options(warn =-1); my.data <-read_csv(paste0(my.data.yaml$directory,my.data.yaml$file),
+    skip=my.data.yaml$type$skip, col_types=paste0("diii",str_dup("ddi",9),"dd")) %>%
+    mutate(cdate=ymd(paste0(year,"-",month,"-15" ) )) %>% select(cdate, value = CH4);
+    options(ow); '
+- name: agage.monthly.RPB.ch4
+  category: climate, ch4, GHG
+  agency: agage
+  link: http://agage.eas.gatech.edu/data_archive/agage/gc-md/monthly/RPB-gcmd_mon.csv
+  directory: ~/data/global/climate/agage/gc-md/monthly/
+  file: RPB-gcmd_mon.csv
+  type:
+    format: csv
+    skip: 15
+    record.names: ~
+    units: ppb
+    date.format: date
+  station:
+    name: Ragged Point
+    acronym: RPB
+    country: Barbados
+  r: 'ow<-options("warn"); options(warn =-1); my.data <-read_csv(paste0(my.data.yaml$directory,my.data.yaml$file),
+    skip=my.data.yaml$type$skip, col_types=paste0("diii",str_dup("ddi",9),"dd")) %>%
+    mutate(cdate=ymd(paste0(year,"-",month,"-15" ) )) %>% select(cdate, value = CH4);
+    options(ow); '
+- name: agage.monthly.SMO.ch4
+  category: climate, ch4, GHG
+  agency: agage
+  link: http://agage.eas.gatech.edu/data_archive/agage/gc-md/monthly/SMO-gcmd_mon.csv
+  directory: ~/data/global/climate/agage/gc-md/monthly/
+  file: SMO-gcmd_mon.csv
+  type:
+    format: csv
+    skip: 15
+    record.names: ~
+    units: ppb
+    date.format: date
+  station:
+    name: Cape Matatula
+    acronym: SMO
+    country: Samoa
+  r: 'ow<-options("warn"); options(warn =-1); my.data <-read_csv(paste0(my.data.yaml$directory,my.data.yaml$file),
+    skip=my.data.yaml$type$skip, col_types=paste0("diii",str_dup("ddi",9),"dd")) %>%
+    mutate(cdate=ymd(paste0(year,"-",month,"-15" ) )) %>% select(cdate, value = CH4);
+    options(ow); '
+- name: agage.monthly.CGO.ch4
+  category: climate, ch4, GHG
+  agency: CSIRO
+  link: http://agage.eas.gatech.edu/data_archive/agage/gc-md/monthly/CGO-gcmd_mon.csv
+  directory: ~/data/global/climate/agage/gc-md/monthly/
+  file: CGO-gcmd_mon.csv
+  type:
+    format: csv
+    skip: 15
+    record.names: ~
+    units: ppb
+    date.format: date
+  station:
+    name: Cape Grim
+    acronym: CGO
+    country: Australia
+  r: 'ow<-options("warn"); options(warn =-1); my.data <-read_csv(paste0(my.data.yaml$directory,my.data.yaml$file),
+    skip=my.data.yaml$type$skip, col_types=paste0("diii",str_dup("ddi",9),"dd")) %>%
+    mutate(cdate=ymd(paste0(year,"-",month,"-15" ) )) %>% select(cdate, value = CH4);
+    options(ow); '
+- name: mauna.loa.insitu.co2
+  category: climate, co2, GHG
+  agency: NOAA
+  link: ftp://aftp.cmdl.noaa.gov/data/trace_gases/co2/in-situ/surface/mlo/co2_mlo_surface-insitu_1_ccgg_MonthlyData.txt
+  directory: ~/data/global/climate/noaa/data/trace_gases/co2/in-situ/surface/mlo/
+  file: co2_mlo_surface-insitu_1_ccgg_MonthlyData.txt
+  type:
+    format: csv
+    skip: 142
+    record.names: site_code,year,month,day,hour,minute,second,value,value_unc,nvalue,latitude,longitude,altitude,elevation,intake_height,instrument,qcflag
+    units: ppb
+    date.format: decimal.date
+  station:
+    name: Mauna Loa
+    acronym: MLO
+    state: Hawaii
+    country: U.S.
+  r: 'my.data <-read.delim(paste0(my.data.yaml$directory,my.data.yaml$file), skip=my.data.yaml$type$skip,
+    sep=" ")   ; names(my.data)<- stringr::str_split(my.data.yaml$type$record.names, ",")[[1]]
+    %>% str_to_lower(); my.data <-my.data %>% mutate( cdate= ymd(paste(year, month,
+    "15", sep="-")), date=decimal_date(cdate)); my.data <- my.data %>% select(date,
+    cdate,value); my.data <- my.data %>% subset(value >0) '
+  comment: ~
+  legend: 'data sourced from  '
+- name: mauna.loa.insitu.ch4
+  category: climate, ch4, GHG
+  agency: NOAA
+  link: ftp://aftp.cmdl.noaa.gov/data/trace_gases/ch4/in-situ/surface/mlo/ch4_mlo_surface-insitu_1_ccgg_MonthlyData.txt
+  directory: ~/data/global/climate/noaa/data/trace_gases/ch4/in-situ/surface/mlo/
+  file: ch4_mlo_surface-insitu_1_ccgg_MonthlyData.txt
+  type:
+    format: csv
+    skip: 133
+    record.names: site_code,year,month,day,hour,minute,second,value,value_unc,nvalue,latitude,longitude,altitude,elevation,intake_height,instrument,qcflag
+    units: ppb
+    date.format: decimal.date
+  station:
+    name: Mauna Loa
+    acronym: MLO
+    state: Hawaii
+    country: U.S.
+  r: 'my.data <-read.delim(paste0(my.data.yaml$directory,my.data.yaml$file), skip=my.data.yaml$type$skip,
+    sep=" ")   ; names(my.data)<- stringr::str_split(my.data.yaml$type$record.names, ",")[[1]]
+    %>% str_to_lower(); my.data <-my.data %>% mutate( cdate= ymd(paste(year, month,
+    "15", sep="-")), date=decimal_date(cdate)); my.data <- my.data %>% select(date,
+    cdate,value); my.data <- my.data %>% subset(value >0) '
+  comment: ~
+  legend: 'data sourced from  '
+- name: noaa.global.ch4
+  category: climate, ch4, GHG
+  agency: NOAA
+  link: ftp://aftp.cmdl.noaa.gov/products/trends/ch4/ch4_mm_gl.txt
+  directory: ~/data/global/climate/noaa/data/trends/ch4/
+  file: ch4_mm_gl.txt
+  type:
+    format: whitespace
+    skip: 133
+    record.names: year,month,date,value,uncertainty,trends,trend_unc
+    units: ppb
+    date.format: decimal.date
+  station:
+    name: global
+  r: my.data <-read.table(paste0(my.data.yaml$directory,my.data.yaml$file), sep="")   ;
+    names(my.data)<- stringr::str_split(my.data.yaml$type$record.names, ",")[[1]] %>% str_to_lower();
+    my.data<- my.data[,c(3,4,5,6,7)]
+  comment: ~
+  legend: 'data sourced from NOAA '
+- name: cdiac
+  link: http://cdiac.ornl.gov/ftp/ndp030/CSV-FILES/global.1751_2014.csv
+  category: climate,energy, co2
+  agency: CDIAC
+  directory: ~/data/global/climate/cdiac/ndp030/CSV-FILES/
+  file: global.1751_2014.csv
+  reference: Boden, T.A., G. Marland, and R.J. Andres. 2016. Global, Regional, and
+    National Fossil-Fuel CO2 Emissions. Carbon Dioxide Information Analysis Center,
+    Oak Ridge National Laboratory, U.S. Department of Energy, Oak Ridge, Tenn., U.S.A.
+    doi 10.3334/CDIAC/00001_V2016.
+  type:
+    format: csv
+    tabular: 2
+    header: 1
+    skip: 2
+    records:
+    - 7
+    - 8
+    lines: 198
+    record.names: year,total,gas,liquid,solid,cement,flaring,per.cap
+  code.example: /Users/msandifo/Dropbox/msandifo/documents/books/energy_and_the_earth/code/cdiac_emissions.R
+  r: cdiac.data.1 <-read.csv(paste0(my.data.yaml$directory,my.data.yaml$file), header=F,
+    skip=2, na.strings="", nrows=199); cdiac.data.1$V8=NA; cdiac.data.2 <-read.csv(
+    paste0(my.data.yaml$directory,my.data.yaml$file), header=F, skip=201, na.strings=""
+    ); my.data <-rbind(cdiac.data.1 , cdiac.data.2); names(my.data)<- stringr::str_split(my.data.yaml$type$record.names,
+    ",")[[1]];
+  comment: ~
+- name: cdiac.nation
+  link: http://cdiac.ornl.gov/ftp/ndp030/CSV-FILES/nation.1751_2014.csv
+  category: climate,energy, co2
+  agency: CDIAC
+  directory: ~/data/global/climate/cdiac/ndp030/CSV-FILES/
+  file: nation.1751_2014.csv
+  reference: Boden, T.A., G. Marland, and R.J. Andres. 2016. Global, Regional, and
+    National Fossil-Fuel CO2 Emissions. Carbon Dioxide Information Analysis Center,
+    Oak Ridge National Laboratory, U.S. Department of Energy, Oak Ridge, Tenn., U.S.A.
+    doi 10.3334/CDIAC/00001_V2016.
+  type:
+    format: csv
+    tabular: 2
+    header: 1
+    skip: 2
+    records:
+    - 7
+    - 8
+    lines: 198
+    record.names: year,total,gas,liquid,solid,cement,flaring,per.cap
+  code.example: ~
+  r: cdiac.data.1 <-read.csv(paste0(my.data.yaml$directory,my.data.yaml$file), header=F,
+    skip=2, na.strings="", nrows=199); cdiac.data.1$V8=NA; cdiac.data.2 <-read.csv(
+    paste0(my.data.yaml$directory,my.data.yaml$file), header=F, skip=201, na.strings=""
+    ); my.data <-rbind(cdiac.data.1 , cdiac.data.2); names(my.data)<- stringr::str_split(my.data.yaml$type$record.names,
+    ",")[[1]];
+  comment: ~
+- name: cape.grim.co2
+  category: climate, co2, GHG
+  agency: CSIRO
+  link: http://capegrim.csiro.au/GreenhouseGas/data/CapeGrim_CO2_data_download.csv
+  directory: ~/data/global/climate/csiro/greenhouse-gases/GreenhouseGas/data/
+  file: CapeGrim_CO2_data_download.csv
+  type:
+    format: csv
+    skip: 24
+    columns:
+    - 4
+    - 5
+    - 6
+    - 7
+    record.names: Date,Value,Uncertainty,Source
+    units: ppm
+    date.format: decimal.date
+  station:
+    name: Cape Grim
+    acronym: CGO
+    country: Australia
+  r: my.data <-read.csv(paste0(my.data.yaml$directory,my.data.yaml$file), skip=my.data.yaml$type$skip)[,c(4,5,6,7)]
+    %>% subset(!is.na(DATE)); my.data.1 <-read.csv(paste0(my.data.yaml$directory,my.data.yaml$file),
+    skip=my.data.yaml$type$skip)[,c(1,2,3,4)] %>% subset(!is.na(DATE)); names(my.data)<-
+    stringr::str_split(my.data.yaml$type$record.names, ",")[[1]] %>% str_to_lower(); my.data$cdate
+    <- ymd(str_c(my.data.1$YYYY, my.data.1$MM,my.data.1$DD,sep="/"));
+  comment: ~
+  legend: data sourced from CSIRO
+- name: cape.grim.n2o
+  category: climate, n2o
+  agency: CSIRO
+  link: http://capegrim.csiro.au/GreenhouseGas/data/CapeGrim_N2O_data_download.csv
+  directory: ~/data/global/climate/csiro/greenhouse-gases/GreenhouseGas/data/
+  file: CapeGrim_N2O_data_download.csv
+  type:
+    format: csv
+    skip: 24
+    columns:
+    - 4
+    - 5
+    - 6
+    - 7
+    record.names: Date,Value,Uncertainty,Source
+    units: ppb
+    date.format: decimal.date
+  station:
+    name: Cape Grim
+    acronym: CGO
+    country: Australia
+  r: my.data <-read.csv(paste0(my.data.yaml$directory,my.data.yaml$file), skip=my.data.yaml$type$skip)[,c(4,5,6,7)]
+    %>% subset(!is.na(DATE)); my.data.1 <-read.csv(paste0(my.data.yaml$directory,my.data.yaml$file),
+    skip=my.data.yaml$type$skip)[,c(1,2,3,4)] %>% subset(!is.na(DATE)); names(my.data)<-
+    stringr::str_split(my.data.yaml$type$record.names, ",")[[1]] %>% str_to_lower(); my.data$cdate
+    <- ymd(str_c(my.data.1$YYYY, my.data.1$MM,my.data.1$DD,sep="/"));
+  comment: ~
+  legend: data sourced from CSIRO
+- name: cape.grim.ch4
+  category: climate, ch4, GHG
+  agency: CSIRO
+  link: http://capegrim.csiro.au/GreenhouseGas/data/CapeGrim_CH4_data_download.csv
+  directory: ~/data/global/climate/csiro/greenhouse-gases/GreenhouseGas/data/
+  file: CapeGrim_CH4_data_download.csv
+  type:
+    format: csv
+    skip: 24
+    columns:
+    - 4
+    - 5
+    - 6
+    - 7
+    record.names: Date,Value,Uncertainty,Source
+    units: ppb
+    date.format: decimal.date
+  station:
+    name: Cape Grim
+    acronym: CGO
+    country: Australia
+  r: 'my.data <-read.csv(paste0(my.data.yaml$directory,my.data.yaml$file), skip=my.data.yaml$type$skip)[,c(4,5,6,7)]
+    %>% subset(!is.na(DATE)); my.data.1 <-read.csv(paste0(my.data.yaml$directory,my.data.yaml$file),
+    skip=my.data.yaml$type$skip)[,c(1,2,3,4)] %>% subset(!is.na(DATE)); names(my.data)<-
+    stringr::str_split(my.data.yaml$type$record.names, ",")[[1]] %>% str_to_lower(); my.data$cdate
+    <- ymd(str_c(my.data.1$YYYY, my.data.1$MM,my.data.1$DD,sep="/")); '
+  comment: ~
+  legend: data sourced from CSIRO
+- name: bh.rc.bytrajectory
+  category: energy, rig
+  link: http://phx.corporate-ir.net/External.File?item=UGFyZW50SUQ9Njk5NDM1fENoaWxkSUQ9NDEwOTM4fFR5cGU9MQ==&t=1
+  directory: ~/data/regional/us/energy/bakerhughes/
+  soffice: soffice --convert-to xls --outdir ~/data/regional/us/energy/bakerhughes/
+    ~/data/regional/us/energy/bakerhughes/North.America.Rig.Count.xlsb
+  file: North.America.Rig.Count.xlsb
+  type:
+    format: xlsb
+    record.names: Date,DIR,HORZ,VERT,TOTAL,DIR%,HORIZ%,VERT%
+    units: number.rigs
+    date.format: POSIXct
+  r: f.name= paste0(my.data.yaml$directory,str_replace(my.data.yaml$file, "xlsb",
+    "xls")); my.data<-read_excel(f.name, sheet=5,skip=5); names(my.data)<- stringr::str_split(my.data.yaml$type$record.names,
+    ",")[[1]] %>% str_to_lower(); my.data <- my.data %>% subset(!is.na(date))
+  comment: Note - downloaded xlsb (binary format) needs conversion to xlsx e.g. using   soffice
+    (from the libreoffice suite)
+  legend: data sourced from BakerHughes
+- name: eia.us.ng.withdrawals
+  category: energy, gas
+  agency: Energy Information Agency
+  region: us
+  link: http://www.eia.gov/dnav/ng/xls/NG_PROD_SUM_A_EPG0_FGW_MMCF_M.xls
+  directory: ~/data/regional/us/energy/eia/dnav/ng/xls/
+  file: NG_PROD_SUM_A_EPG0_FGW_MMCF_M.xls
+  wget: wget -O ~/data/regional/us/energy/eia/dnav/ng/xls/NG_PROD_SUM_A_EPG0_FGW_MMCF_M.xls   http://www.eia.gov/dnav/ng/xls/NG_PROD_SUM_A_EPG0_FGW_MMCF_M.xls
+  csvkit: in2csv --sheet 'Data 1' ~/data/regional/us/energy/eia/dnav/ng/xls/NG_PROD_SUM_A_EPG0_FGW_MMCF_M.xls
+    > ~/data/regional/us/energy/eia/dnav/ng/xls/NG_PROD_SUM_A_EPG0_FGW_MMCF_M.csv
+  type:
+    format: xls
+    units: monthly.million.cubic.feet
+    record.names: date,US,Alaska,Arkansas,California,Colorado,Gulf.Mexico,Kansas,Louisiana,Montana,New.Mexico,North.Dakota,Ohio,Oklahoma,Pennsylvania,Texas,Utah,West.Virginia,Wyoming
+  r: my.data <-read.csv(paste0(my.data.yaml$directory,str_replace(my.data.yaml$file,
+    "M.xls", "M.csv")),skip=3 ); names(my.data)<- stringr::str_split(my.data.yaml$type$record.names,
+    ",")[[1]] %>% str_to_lower(); my.data$cdate <- as.Date( my.data[,1] -2, origin
+    = "1900-01-01") ; my.data[,1] <-  my.data$cdate %>% decimal_date(); my.data <-
+    my.data %>% subset(!is.na(us))
+  station:
+    name: EIA-US-Gas
+    acronym: USGV
+    country: US
+  comment: Note - using wget and in2csv  (csvkit) to transform xls to csv
+  legend: data sourced from Energy Information Agency
+- name: eia.us.cbm.annual
+  category: energy, gas, coalbed methane, csg
+  agency: Energy Information Agency
+  region: us
+  link: https://www.eia.gov/dnav/ng/xls/NG_PROD_COALBED_S1_A.xls
+  directory: ~/data/regional/us/energy/eia/dnav/ng/xls/
+  file: NG_PROD_COALBED_S1_A.xls
+  wget: wget -O ~/data/regional/us/energy/eia/dnav/ng/xls//NG_PROD_COALBED_S1_A.xls   https://www.eia.gov/dnav/ng/xls/NG_PROD_COALBED_S1_A.xls
+  csvkit: in2csv --sheet 'Data 1' ~/data/regional/us/energy/eia/dnav/ng/xls/NG_PROD_COALBED_S1_A.xls
+    > ~/data/regional/us/energy/eia/dnav/ng/xls/NG_PROD_COALBED_S1_A.csv --no-inference
+  type:
+    format: xls
+    units: annual.billion.cubic.feet
+    record.names: Date,US,Alabama,Alaska.(with.Total.Offshore),Arkansas,California.(with.State.off),Colorado,Florida,Kansas,Kentucky,Louisiana.(with.State.Offshore),Louisiana--North,Louisiana--South.Onshore,Louisiana--State.Offshore,Michigan,Mississippi.(with.State.off),Montana,New.Mexico,New.Mexico--East,New.Mexico--West,New.York,North.Dakota,Ohio,Oklahoma,Pennsylvania,Texas.(with.State.Offshore),Texas--RRC.District.1,Texas--RRC.District.2.Onshore,Texas--RRC.District.3.Onshore,Texas--RRC.District.4.Onshore,Texas--RRC.District.5,Texas--RRC.District.6,Texas--RRC.District.7B,Texas--RRC.District.7C,Texas--RRC.District.8,Texas--RRC.District.8A,Texas--RRC.District.9,Texas--RRC.District.10,Texas--State.Offshore,Utah,Virginia,West.Virginia,Wyoming,Lower.48.Federal.Offshore,Lower.48.States,Eastern.States,Western.States,Other.State.Reserves.Based.Production
+  r: 'my.data <- read_excel(paste0(my.data.yaml$directory,my.data.yaml$file),sheet=2,skip=2);
+    print(colnames(my.data)); print(length(stringr::str_split(my.data.yaml$type$record.names,
+    ",")[[1]]) ); names(my.data)<- stringr::str_split(my.data.yaml$type$record.names, ",")[[1]]
+    ; #  my.data[,1] <-as.Date( my.data[,1] -2, origin = "1900-01-01"); #my.data <-
+    my.data %>% subset(!is.na(us)) '
+  station:
+    name: EIA-US-Gas-CBM
+  acronym: USGV
+  country: US
+  comment: Note - using wget and in2csv  (csvkit) to transform xls to csv
+  legend: data sourced from Energy Information Agency
+- name: eia.us.cbm.annual.withdrawals
+  category: energy, gas, coalbed methane, csg, withdrawals
+  agency: Energy Information Agency
+  region: us
+  link: https://www.eia.gov/dnav/ng/xls/NG_PROD_SUM_A_EPG0_FGC_MMCF_A.xls
+  directory: ~/data/regional/us/energy/eia/dnav/ng/xls/
+  file: NG_PROD_SUM_A_EPG0_FGC_MMCF_A.xls
+  wget: wget -O ~/data/regional/us/energy/eia/dnav/ng/xls//NG_PROD_SUM_A_EPG0_FGC_MMCF_A.xls   https://www.eia.gov/dnav/ng/xls/NG_PROD_SUM_A_EPG0_FGC_MMCF_A.xls
+  csvkit: in2csv --sheet 'Data 1' ~/data/regional/us/energy/eia/dnav/ng/xls/NG_PROD_SUM_A_EPG0_FGC_MMCF_A.xls
+    > ~/data/regional/us/energy/eia/dnav/ng/xls/NG_PROD_SUM_A_EPG0_FGC_MMCF_A.csv
+    --no-inference
+  type:
+    format: xls
+    units: annual.million.cubic.feet
+    record.names: Date,US,Alaska,Alaska.onshore,Arkansas,California,Colorado,Gulf.of.Mexico,Kansas,Louisiana,Louisiana.onshore,Montana,New.Mexico,North.Dakota,Ohio,Oklahoma,Pennsylvania,Texas,Texas.Offshore,Utah,West.Virginia,Wyoming
+  r: 'my.data <- read_excel(paste0(my.data.yaml$directory,my.data.yaml$file),sheet=2,skip=2);
+    print(colnames(my.data)); print(length(stringr::str_split(my.data.yaml$type$record.names,
+    ",")[[1]]) ); names(my.data)<- stringr::str_split(my.data.yaml$type$record.names, ",")[[1]]
+    ; #  my.data[,1] <-as.Date( my.data[,1] -2, origin = "1900-01-01"); #my.data <-
+    my.data %>% subset(!is.na(us)) '
+  station:
+    name: EIA-US-Gas-CBM-annual-withdrawals
+  acronym: USGV
+  country: US
+  comment: Note - using wget and in2csv  (csvkit) to transform xls to csv
+  legend: data sourced from Energy Information Agency
+- name: eia.us.cbm.monthly.withdrawals
+  category: energy, gas, coalbed methane, csg, withdrawals
+  agency: Energy Information Agency
+  region: us
+  link: https://www.eia.gov/dnav/ng/xls/NG_PROD_SUM_A_EPG0_FGC_MMCF_M.xls
+  directory: ~/data/regional/us/energy/eia/dnav/ng/xls/
+  file: NG_PROD_SUM_A_EPG0_FGC_MMCF_M.xls
+  wget: wget -O ~/data/regional/us/energy/eia/dnav/ng/xls//NG_PROD_SUM_A_EPG0_FGC_MMCF_M.xls   https://www.eia.gov/dnav/ng/xls/NG_PROD_SUM_A_EPG0_FGC_MMCF_M.xls
+  csvkit: in2csv --sheet 'Data 1' ~/data/regional/us/energy/eia/dnav/ng/xls/NG_PROD_SUM_A_EPG0_FGC_MMCF_M.xls
+    > ~/data/regional/us/energy/eia/dnav/ng/xls/NG_PROD_SUM_A_EPG0_FGC_MMCF_M.csv
+    --no-inference
+  type:
+    format: xls
+    units: monthly.million.cubic.feet
+    record.names: Date,US,Alaska,Arkansas,California,Colorado,Gulf.of.Mexico,Kansas,Louisiana,Montana,New.Mexico,North.Dakota,Ohio,Oklahoma,Pennsylvania,Texas,Utah,West.Virginia,Wyoming
+  r: 'my.data <- read_excel(paste0(my.data.yaml$directory,my.data.yaml$file),sheet=2,skip=2);
+    print(colnames(my.data)); print(length(stringr::str_split(my.data.yaml$type$record.names,
+    ",")[[1]]) ); names(my.data)<- stringr::str_split(my.data.yaml$type$record.names, ",")[[1]]
+    ; #  my.data[,1] <-as.Date( my.data[,1] -2, origin = "1900-01-01"); #my.data <-
+    my.data %>% subset(!is.na(us)) '
+  station:
+    name: EIA-US-Gas-CBM-monthly-withdrawals
+  acronym: USGV
+  country: US
+  comment: Note - using wget and in2csv  (csvkit) to transform xls to csv
+  legend: data sourced from Energy Information Agency
+- name: eia.hh.monthly.price
+  category: energy, gas
+  agency: Energy Information Agency
+  region: us
+  link: https://www.eia.gov/dnav/ng/hist_xls/RNGWHHDm.xls
+  directory: ~/data/regional/us/energy/eia/dnav/hist_xls/
+  file: RNGWHHDm.xls
+  wget: wget -O ~/data/regional/us/energy/eia/dnav/hist_xls/RNGWHHDm.xls   https://www.eia.gov/dnav/ng/hist_xls/RNGWHHDm.xls
+  type:
+    format: xls
+    units: US.dollars.per.million.btu
+    record.names: date,value
+    date.format: date
+  r: my.data <-read_excel( paste0(my.data.yaml$directory,my.data.yaml$file),skip=3
+    , sheet=2); names(my.data)<- stringr::str_split(my.data.yaml$type$record.names, ",")[[1]]
+    %>% str_to_lower(); my.data <- my.data %>% subset(!is.na(date))
+  comment: ~
+  legend: data sourced from Energy Information Agency
+- name: eia.hh.daily.price
+  category: energy, gas
+  agency: Energy Information Agency
+  region: us
+  link: https://www.eia.gov/dnav/ng/hist_xls/RNGWHHDd.xls
+  directory: ~/data/regional/us/energy/eia/dnav/hist_xls/
+  file: RNGWHHDd.xls
+  wget: wget -O ~/data/regional/us/energy/eia/dnav/hist_xls/RNGWHHDd.xls   https://www.eia.gov/dnav/ng/hist_xls/RNGWHHDd.xls
+  type:
+    format: xls
+    units: US.dollars.per.million.btu
+    record.names: date,value
+    date.format: date
+  r: my.data <-read_excel( paste0(my.data.yaml$directory,my.data.yaml$file),skip=3
+    , sheet=2); names(my.data)<- stringr::str_split(my.data.yaml$type$record.names, ",")[[1]]
+    %>% str_to_lower(); my.data <- my.data %>% subset(!is.na(date))
+  comment: ~
+  legend: data sourced from Energy Information Agency
+- name: eia.drygas
+  category: energy, gas
+  agency: Energy Information Agency
+  region: us
+  link: https://www.eia.gov/naturalgas/weekly/img/shale_gas_201807.xlsx
+  directory: ~/data/regional/us/energy/eia/energy_in_brief/data/
+  file: U.S._dry_shale_gas_production.xlsx
+  type:
+    format: xls
+    units: bcf.per.day
+    record.names: date,Antrim,Bakken,Woodford,Barnett,Fayetteville,EagleFord,Haynesville,Marcellus,Utica,Permian,Other
+    date.format: date
+  r: my.data <-(read_excel(paste0(my.data.yaml$directory, my.data.yaml$file),skip=0,col_names=T,
+    sheet=1))[,1:12]; names(my.data) <- stringr::str_split(my.data.yaml$type$record.names,
+    ",")[[1]]; my.data <- my.data %>% subset(!is.na(date)) %>% gather(field, value,-date)
+  ggplot: library(RColorBrewer); dg.eia <-read_data("eia.drygas")$data%>% arrange(field);
+    abbr.length <- 12; dg.eia$field.abbr <- str_trunc(dg.eia$field, abbr.length, ellipsis=".");
+    colourCount = length(unique(dg.eia$field.abbr)); getPalette <-  colorRampPalette(brewer.pal(8,
+    "Accent")) ; my.colours <- data.frame(field= dg.eia$field.abbr, colour=getPalette(colourCount)); ggplot(dg.eia, aes((date), value, fill=field.abbr)) + geom_area(
+    position = "stack" , colour="grey40", size=.13)+ scale_fill_manual(values= my.colours$colour,
+    guide = guide_legend(nrow=4, title=NULL))+ labs(x=NULL, y= "bcf per day")+ theme(legend.position=c(.4,.85))
+    + scale_x_datetime(expand=c(.0,.0))+ scale_y_continuous(expand=c(0.0,0))+ labs(caption=get_agency("eia.drygas"))
+  comment: note that link may need to be updated since it has a date signature -https://www.eia.gov/naturalgas/weekly/img/shale_gas_201807.xlsx,
+    for example,  set_yaml_link("https://www.eia.gov/naturalgas/weekly/img/shale_gas_201807.xlsx","eia.drygas")
+  legend: dry gas production by formation
+- name: eia.tightoil
+  category: energy, oil
+  agency: Energy Information Agency
+  region: us
+  link: https://www.eia.gov/energyexplained/data/U.S.%20tight%20oil%20production.xlsx
+  directory: ~/data/regional/us/energy/eia/energy_in_brief/data/
+  file: U.S._tight_oil_production.xlsx
+  type:
+    format: xls
+    units: mmbbl.per.day
+    record.names: date,Monterey,Austin.Chalk,Granite.Wash,Woodford,Marcellus,Haynesville,Niobrara.Codell,Wolfcamp,Bonespring,Spraberry,Bakken,EagleFord,Yeso.Glorieta,Delaware,Utica
+    date.format: date
+  r: my.data <-(read_excel( paste0(my.data.yaml$directory,my.data.yaml$file),skip=0,col_names=T,
+    sheet=1))[,1:16]; names(my.data) <- stringr::str_split(my.data.yaml$type$record.names,
+    ",")[[1]] ; my.data <- my.data %>% subset(!is.na(date)) %>% gather(field, value,
+    -date) %>% subset(!is.na(field))
+  ggplot: library(RColorBrewer); dg.eia <-read_data("eia.tightoil")$data%>% arrange(field);
+    abbr.length <- 12; dg.eia$field.abbr <- str_trunc(dg.eia$field, abbr.length, ellipsis=".");
+    colourCount = length(unique(dg.eia$field.abbr)); getPalette <-  colorRampPalette(brewer.pal(8,
+    "Accent")) ; my.colours <- data.frame(field= dg.eia$field.abbr, colour=getPalette(colourCount)); ggplot(dg.eia, aes((date), value, fill=field.abbr)) + geom_area(
+    position = "stack" , colour="grey40", size=.13)+ scale_fill_manual(values= my.colours$colour,
+    guide = guide_legend(nrow=4, title=NULL))+ labs(x=NULL, y= "mmbl per day")+ theme(legend.position=c(.4,.85))
+    + scale_x_datetime(expand=c(.0,.0))+ scale_y_continuous(expand=c(0.0,0))+ labs(caption=get_agency("eia.tightoil"))
+  comment: ~
+  legend: tight oil production by formation
+- name: eia.co2
+  category: energy, climate, co2, US
+  agency: Energy Information Agency
+  region: us
+  link: https://www.eia.gov/totalenergy/data/browser/xls.cfm?tbl=T12.01&freq=m
+  directory: ~/data/regional/us/energy/eia/totalenergy/data/browser/
+  file: Table_12.1_Carbon_Dioxide_Emissions_From_Energy_Consumption_by_Source.xlsx
+  wget: wget -O ~/data/regional/us/energy/eia/totalenergy/data/browser/Table_12.1_Carbon_Dioxide_Emissions_From_Energy_Consumption_by_Source.xlsx   https://www.eia.gov/totalenergy/data/browser/xls.cfm?tbl=T12.01&freq=m
+  type:
+    format: xls
+    skip: 11
+    units: million.tonnes.per.month
+    record.names: date,coal,gas,avgas,dist,jet,kero,lpg,lubr,motor.gas,petrol.coke,resid,other.petrol,petrol,total
+    date.format: cdate
+  r: my.data <-read_excel( paste0(my.data.yaml$directory,my.data.yaml$file),skip=11,col_names=T,
+    sheet=1); names(my.data) <- stringr::str_split(my.data.yaml$type$record.names, ",")[[1]]
+    ; my.data <- my.data %>% subset(!is.na(date)) %>% gather(fuel, value, -date) %>%
+    subset(!is.na(fuel))
+  comment: monthly total energy sector emissions
+  legend: US total energy sector CO2 emissions
+- name: eia.co2.power
+  category: energy, climate, co2
+  agency: Energy Information Agency
+  region: us
+  link: https://www.eia.gov/totalenergy/data/browser/xls.cfm?tbl=T12.06&freq=m
+  directory: ~/data/regional/us/energy/eia/totalenergy/data/browser/
+  file: Table_12.6_Carbon_Dioxide_Emissions_From_Energy_Consumption__Electric_Power_Sector.xlsx
+  wget: wget -O ~/data/regional/us/energy/eia/totalenergy/data/browser/Table_12.6_Carbon_Dioxide_Emissions_From_Energy_Consumption__Electric_Power_Sector.xlsx   https://www.eia.gov/totalenergy/data/browser/xls.cfm?tbl=T12.06&freq=m
+  type:
+    format: xls
+    skip: 11
+    units: million.tonnes.per.month
+    record.names: date,coal,gas,dist,petrol.coke,resid,petrol,geotherm,non.bio,total
+    date.format: cdate
+  r: my.data <-read_excel( paste0(my.data.yaml$directory,my.data.yaml$file),skip=11,col_names=T,
+    sheet=1, na="Not Available"); names(my.data) <- stringr::str_split(my.data.yaml$type$record.names,
+    ",")[[1]] ; my.data <- my.data %>% subset(!is.na(date)) %>% gather(fuel, value,
+    -date) %>% subset(!is.na(fuel))
+  comment: monthly US electricity sector emissions
+  legend: US electricity sector CO2 emissions
+- name: eia.coal
+  category: energy, climate, coal
+  agency: Energy Information Agency
+  region: us
+  link: https://www.eia.gov/totalenergy/data/browser/xls.cfm?tbl=T06.01&freq=m
+  directory: ~/data/regional/us/energy/eia/totalenergy/data/browser/
+  file: Table_6.1_Coal_Overview.xlsx
+  wget: wget -O ~/data/regional/us/energy/eia/totalenergy/data/browser/Table_6.1_Coal_Overview.xlsx   https://www.eia.gov/totalenergy/data/browser/xls.cfm?tbl=T06.01&freq=m
+  type:
+    format: xls
+    skip: 12
+    units: thousand.short.tons.per.month
+    record.names: date,production,waste,imports,exports,net.imports,stock.change,losses,consumption
+    date.format: cdate
+  r: my.data <-read_excel( paste0(my.data.yaml$directory,my.data.yaml$file),skip=12,col_names=T,
+    sheet=1, na="Not Available"); names(my.data) <- stringr::str_split(my.data.yaml$type$record.names,
+    ",")[[1]] ; my.data <- my.data %>% subset(!is.na(date)) %>% gather(use, value,
+    -date) %>% subset(!is.na(use))
+  comment: monthly US coal figures
+  legend: US coal data
+- name: tas.hydro
+  category: energy, hydro
+  agency: HydorTas
+  region: australia
+  link: http://www.hydro.com.au/system/files/water-storage/storage_summary-4.xls
+  directory: ~/data/regional/australia/energy/hydrotasmania/system/files/water-storage/
+  file: storage_summary-4.xls
+  type:
+    format: xls
+    skip: 5
+    units: ~
+    record.names: date,St.Clair,Echo,Bronte,Augusta,Arthurs,Mackenzie,Rowallan,Gairdner,Pedder,Burbury,Murchison,Plimsoll,Margaret,system.excl.,system,system.less,quarter,av.quarter
+    date.format: cdate
+  r: my.data <-read_excel( paste0(my.data.yaml$directory,my.data.yaml$file),skip=8,col_names=F,
+    sheet=1, na=""); names(my.data) <- stringr::str_split(my.data.yaml$type$record.names, ",")[[1]]
+    ; my.data <- my.data %>% subset(!is.na(date)); my.data.1 <-read_excel( paste0(my.data.yaml$directory,my.data.yaml$file),skip=7,col_names=F,
+    sheet=1, na="")[1,]; names(my.data.1) <- stringr::str_split(my.data.yaml$type$record.names,
+    ",")[[1]] ;
+  comment: Tas hydro filling
+  legend: Tas hydro filling
+- name: north.dakota.gas
+  category: energy, gas
+  agency: North Dakota Industrial Commission
+  region: us
+  link: https://www.dmr.nd.gov/oilgas/stats/Gas1990ToPresent.xls
+  directory: ~/data/regional/us/energy/dmr.nd.gov/oilgas/stat/
+  file: Gas1990ToPresent.xls
+  type:
+    format: xls
+    skip: 1
+    units: mcf
+    record.names: date,produced,sold,flared,bakken.produced,bakken.sold,bakken.flared
+    date.format: mdate
+  r: my.data <-read_excel( paste0(my.data.yaml$directory,my.data.yaml$file),skip=1,col_names=F,
+    sheet=1, na=""); names(my.data) <- stringr::str_split(my.data.yaml$type$record.names, ",")[[1]]
+    ; my.data$date <- lubridate::dmy(paste0("15-", my.data$date) ); my.data <- my.data
+    %>% subset(!is.na(date));
+  comment: Noth Dakota gas production, sales and flaring
+  legend: Noth Dakota gas production
+- name: opec.basket
+  category: energy
+  agency: OPEC
+  region: us
+  link: http://www.opec.org/basket/basketDayArchives.xml
+  directory: ~/data/global/energy/opec/basket/
+  file: basketDayArchives.xml
+  type:
+    format: xml
+    skip: 1
+    units: US$/barrel
+    record.names: date,value
+    date.format: cdate
+  r: 'doc <- paste0(my.data.yaml$directory,my.data.yaml$file); my.data <-xmlToDataFrame(doc,  c("date",
+    "numeric") ,nodes=getNodeSet(doc, "//data/val")) #names(my.data) <- stringr::str_split(my.data.yaml$type$record.names,
+    ",")[[1]] ; #my.data <- my.data %>% subset(!is.na(date)); '
+  comment: OPEC basket price
+  legend: OPEC basket price
+- name: bom.tmax.brisbane
+  category: climate, weather
+  agency: BOM
+  region: australia
+  link: http://www.bom.gov.au/jsp/ncc/cdio/weatherData/av?p_display_type=dailyZippedDataFile&p_stn_num=040913&p_nccObsCode=122&p_c=-334771920&p_startYear=1999
+  directory: ~/data/regional/australia/climate/bom/data/stations/IDCJAC0010_040913_1800/
+  file: IDCJAC0010_040913_1800_Data.csv
+  wget: wget  -O ~/data/regional/australia/climate/bom/data/stations/IDCJAC0010_040913_1800.zip  http://www.bom.gov.au/jsp/ncc/cdio/weatherData/av?p_display_type=dailyZippedDataFile&p_stn_num=040913&p_nccObsCode=122&p_c=-334771920&p_startYear=1999
+  download: no
+  type:
+    format: csv
+    skip: 1
+    units: C
+    record.names: Product.code,station,Year,Month,Day,Max.temp,days,Quality
+    date.format: cdate
+  r: ' my.data <-read.csv(paste0(my.data.yaml$directory,my.data.yaml$file)); my.data$date
+    <- ymd(str_c(my.data$Year, my.data$Month,my.data$Day,sep="/")); my.data <-my.data[,c(9,6,2)];
+    names(my.data)<- c("date","value","station"); my.data'
+  comment: BOM daily temperature - Brisbane 040913
+  legend: see http://www.bom.gov.au/climate/data/stations/
+- name: bom.tmax.melbourne
+  category: climate, weather
+  agency: BOM
+  region: australia
+  link: http://www.bom.gov.au/jsp/ncc/cdio/weatherData/av?p_display_type=dailyZippedDataFile&p_stn_num=040913&p_nccObsCode=122&p_c=-334771920&p_startYear=1999
+  directory: ~/data/regional/australia/climate/bom/data/stations/IDCJAC0010_086071_1800/
+  file: IDCJAC0010_086071_1800_Data.csv
+  wget: wget  -O ~/data/regional/australia/climate/bom/data/stations/IDCJAC0010_086071_1800.zip  http://www.bom.gov.au/jsp/ncc/cdio/weatherData/av?p_display_type=dailyZippedDataFile&p_stn_num=040913&p_nccObsCode=122&p_c=-334771920&p_startYear=1999
+  download: no
+  type:
+    format: csv
+    skip: 1
+    units: C
+    record.names: Product.code,station,Year,Month,Day,Max.temp,days,Quality
+    date.format: cdate
+  r: ' my.data <-read.csv(paste0(my.data.yaml$directory,my.data.yaml$file)); my.data$date
+    <- ymd(str_c(my.data$Year, my.data$Month,my.data$Day,sep="/")); my.data <-my.data[,c(9,6,2)];
+    names(my.data)<- c("date","value","station"); my.data'
+  comment: BOM daily temperature - Melbourne Airport 086071
+  legend: see http://www.bom.gov.au/climate/data/stations/
+- name: bom.tmax.melbourne.airport
+  category: climate, weather
+  agency: BOM
+  region: australia
+  link: http://www.bom.gov.au/jsp/ncc/cdio/weatherData/av?p_display_type=dailyZippedDataFile&p_stn_num=040913&p_nccObsCode=122&p_c=-334771920&p_startYear=1999
+  directory: ~/data/regional/australia/climate/bom/data/stations/IDCJAC0010_086282_1800/
+  file: IDCJAC0010_086282_1800_Data.csv
+  wget: wget  -O ~/data/regional/australia/climate/bom/data/stations/IDCJAC0010_086282_1800.zip  http://www.bom.gov.au/jsp/ncc/cdio/weatherData/av?p_display_type=dailyZippedDataFile&p_stn_num=040913&p_nccObsCode=122&p_c=-334771920&p_startYear=1999
+  download: no
+  type:
+    format: csv
+    skip: 1
+    units: C
+    record.names: Product.code,station,Year,Month,Day,Max.temp,days,Quality
+    date.format: cdate
+  r: ' my.data <-read.csv(paste0(my.data.yaml$directory,my.data.yaml$file)); my.data$date
+    <- ymd(str_c(my.data$Year, my.data$Month,my.data$Day,sep="/")); my.data <-my.data[,c(9,6,2)];
+    names(my.data)<- c("date","value","station"); my.data'
+  comment: BOM daily temperature - Melbourne Airport 086282
+  legend: see http://www.bom.gov.au/climate/data/stations/
+- name: bom.tmax.adelaide
+  category: climate, weather
+  agency: BOM
+  region: australia
+  link: http://www.bom.gov.au/jsp/ncc/cdio/weatherData/av?p_display_type=dailyZippedDataFile&p_stn_num=040913&p_nccObsCode=122&p_c=-334771920&p_startYear=1999
+  directory: ~/data/regional/australia/climate/bom/data/stations/IDCJAC0010_023090_1800/
+  file: IDCJAC0010_023090_1800_Data.csv
+  wget: wget  -O ~/data/regional/australia/climate/bom/data/stations/IDCJAC0010_023090_1800.zip  http://www.bom.gov.au/jsp/ncc/cdio/weatherData/av?p_display_type=dailyZippedDataFile&p_stn_num=040913&p_nccObsCode=122&p_c=-334771920&p_startYear=1999
+  download: no
+  type:
+    format: csv
+    skip: 1
+    units: C
+    record.names: Product.code,station,Year,Month,Day,Max.temp,days,Quality
+    date.format: cdate
+  r: ' my.data <-read.csv(paste0(my.data.yaml$directory,my.data.yaml$file)); my.data$date
+    <- ymd(str_c(my.data$Year, my.data$Month,my.data$Day,sep="/")); my.data <-my.data[,c(9,6,2)];
+    names(my.data)<- c("date","value","station"); my.data'
+  comment: BOM daily temperature - Adelaide (Kent Town) 023090
+  legend: see http://www.bom.gov.au/climate/data/stations/
+- name: bom.tmax.sydney
+  category: climate, weather
+  agency: BOM
+  region: australia
+  link: http://www.bom.gov.au/jsp/ncc/cdio/weatherData/av?p_display_type=dailyZippedDataFile&p_stn_num=040913&p_nccObsCode=122&p_c=-334771920&p_startYear=1999
+  directory: ~/data/regional/australia/climate/bom/data/stations/IDCJAC0010_066062_1800/
+  file: IDCJAC0010_066062_1800_Data.zip
+  wget: wget  -O ~/data/regional/australia/climate/bom/data/stations/IDCJAC0010_066062_1800.zip  http://www.bom.gov.au/jsp/ncc/cdio/weatherData/av?p_display_type=dailyZippedDataFile&p_stn_num=040913&p_nccObsCode=122&p_c=-334771920&p_startYear=1999|
+    unzip -a ~/data/regional/australia/climate/bom/data/stations/IDCJAC0010_066062_1800.zip
+  download: no
+  type:
+    format: csv
+    skip: 1
+    units: C
+    record.names: Product.code,station,Year,Month,Day,Max.temp,days,Quality
+    date.format: cdate
+  r: ' my.data <-read.csv(paste0(my.data.yaml$directory,my.data.yaml$file)); my.data$date
+    <- ymd(str_c(my.data$Year, my.data$Month,my.data$Day,sep="/")); my.data <-my.data[,c(9,6,2)];
+    names(my.data)<- c("date","value","station"); my.data'
+  comment: BOM daily temperature - Sydney (Observatory Hill) 066062
+  legend: see http://www.bom.gov.au/climate/data/stations/
+- name: bom.tmax.hobart
+  category: climate, weather
+  agency: BOM
+  region: australia
+  link: http://www.bom.gov.au/jsp/ncc/cdio/weatherData/av?p_display_type=dailyZippedDataFile&p_stn_num=040913&p_nccObsCode=122&p_c=-334771920&p_startYear=1999
+  directory: ~/data/regional/australia/climate/bom/data/stations/IDCJAC0010_094029_1800/
+  file: IDCJAC0010_094029_1800_Data.csv
+  wget: wget  -O ~/data/regional/australia/climate/bom/data/stations/IDCJAC0010_094029_1800.zip  http://www.bom.gov.au/jsp/ncc/cdio/weatherData/av?p_display_type=dailyZippedDataFile&p_stn_num=040913&p_nccObsCode=122&p_c=-334771920&p_startYear=1999
+  download: no
+  type:
+    format: csv
+    skip: 1
+    units: C
+    record.names: Product.code,station,Year,Month,Day,Max.temp,days,Quality
+    date.format: cdate
+  r: ' my.data <-read.csv(paste0(my.data.yaml$directory,my.data.yaml$file)); my.data$date
+    <- ymd(str_c(my.data$Year, my.data$Month,my.data$Day,sep="/")); my.data <-my.data[,c(9,6,2)];
+    names(my.data)<- c("date","value","station"); my.data'
+  comment: BOM daily temperature -
+  legend: see http://www.bom.gov.au/climate/data/stations/
+- name: acorn.tmax.hobart
+  category: climate, weather
+  agency: BOM
+  region: australia
+  link: http://www.bom.gov.au/climate/change/acorn/sat/data/acorn.sat.maxT.094029.daily.txt
+  directory: ~/data/regional/australia/climate/bom/data/stations/IDCJAC0010_094029_1800/
+  file: acorn.sat.maxT.094029.daily.txt
+  download: yes
+  type:
+    format: tab
+    skip: 1
+    units: C
+    record.names: Product.code,station,Year,Month,Day,Max.temp,days,Quality
+    date.format: cdate
+  r: my.data <-read.table(paste0(my.data.yaml$directory,my.data.yaml$file),  skip=1  );
+    names(my.data)<- c("date","value"); my.data$date <- ymd(my.data$date); my.data
+  comment: ACORN daily temperature - Hobart 094029
+  legend: see http://www.bom.gov.au/climate/data/stations/
+- name: acorn.tmax.melbourne
+  category: climate, weather
+  agency: BOM
+  region: australia
+  link: http://www.bom.gov.au/climate/change/acorn/sat/data/acorn.sat.maxT.086071.daily.txt
+  directory: ~/data/regional/australia/climate/bom/data/stations/IDCJAC0010_086071_1800/
+  file: acorn.sat.maxT.086071.daily.txt
+  download: yes
+  type:
+    format: csv
+    skip: 1
+    units: C
+    record.names: Product.code,station,Year,Month,Day,Max.temp,days,Quality
+    date.format: cdate
+  r: ' my.data <-read.table(paste0(my.data.yaml$directory,my.data.yaml$file),  skip=1  );
+    names(my.data)<- c("date","value"); my.data$date <- ymd(my.data$date); my.data'
+  comment: ACORN daily temperature Melbourne 086071
+  legend: see http://www.bom.gov.au/climate/data/stations/
+- name: acorn.tmax.melbourne.airport
+  category: climate, weather
+  agency: BOM
+  region: australia
+  link: http://www.bom.gov.au/jsp/ncc/cdio/weatherData/av?p_display_type=dailyZippedDataFile&p_stn_num=086282&p_nccObsCode=122&p_c=-1489025319&p_startYear=1970
+  directory: ~/data/regional/australia/climate/bom/data/stations/IDCJAC0010_086282_1800/
+  file: data
+  download: yes
+  type:
+    format: csv
+    skip: 1
+    units: C
+    record.names: Product.code,station,Year,Month,Day,Max.temp,days,Quality
+    date.format: cdate
+  r: ' my.data <-read.table(paste0(my.data.yaml$directory,my.data.yaml$file),  skip=1  );
+    names(my.data)<- c("date","value"); my.data$date <- ymd(my.data$date); my.data'
+  comment: ACORN daily temperature Melbourne.airport 086282
+  legend: see http://www.bom.gov.au/climate/data/stations/
+- name: acorn.tmax.laverton
+  category: climate, weather
+  agency: BOM
+  region: australia
+  link: http://www.bom.gov.au/climate/change/acorn/sat/data/acorn.sat.maxT.087031.daily.txt
+  directory: ~/data/regional/australia/climate/bom/data/stations/IDCJAC0010_087031_1800/
+  file: acorn.sat.maxT.087031.daily.txt
+  download: yes
+  type:
+    format: tab
+    skip: 1
+    units: C
+    record.names: Product.code,station,Year,Month,Day,Max.temp,days,Quality
+    date.format: cdate
+  r: ' my.data <-read.table(paste0(my.data.yaml$directory,my.data.yaml$file),  skip=1  );
+    names(my.data)<- c("date","value"); my.data$date <- ymd(my.data$date); my.data'
+  comment: ACORN daily temperature Laverton RAAF, Victoria  087031
+  legend: see http://www.bom.gov.au/climate/data/stations/

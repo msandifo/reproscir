@@ -13,3 +13,6 @@ read_gladstone_ports(year = NULL, month = NULL,
 \description{
 Title
 }
+\examples{
+
+}

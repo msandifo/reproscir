@@ -137,11 +137,64 @@ read_gasbb <- function(file.name){
 #' @export
 #'
 #' @examples
-group_gasbb <-function(df, zone="Roma"){
-   df %>%
-    subset(stringr::str_detect(zonename, zone) & flowdirection=="DELIVERY") %>%
-    dplyr::group_by(gasdate)%>%
-    dplyr::summarise(actualquantity= sum(actualquantity) )
+group_gasbb <-function(df, zone="Roma", flowdirection="DELIVERY"){
+  # print(tail(df%>%    subset(stringr::str_detect(zonename, zone))))
+  df %>%
+    subset(stringr::str_detect(zonename, zone) & flowdirection %in% flowdirection) %>%
+    dplyr::group_by( gasdate) %>%
+    dplyr::summarise(actualquantity= sum(actualquantity) )%>%
+    dplyr::mutate( zonename=zone,
+                   flowdirection=flowdirection,
+                   year= lubridate::year(gasdate),
+                   month= lubridate::month(gasdate))
+}
 
+#' Title
+#'
+#' @param df
+#'
+#' @return
+#' @export
+#'
+#' @examples
+truncate_gassbb_zonenames <-function(df ){
+  df$zonename <-
+    stringr::str_split_fixed(df$zonename," ",2)[,1]
+  df
+
+
+}
+
+#' Title retrieves gasbb  plantypes from AEMO facility file
+#'
+#' @param planttype
+#' @param gasbb.facility.file location
+#'
+#' @return
+#' @export
+#'
+#' @examples
+gasbb_ids <- function(planttype="PROD",
+                      gasbb.facility.file =  "./data/facility.Rdata"
+){
+  load(gasbb.facility.file)
+  (gasbb.facility %>% subset(PlantType==planttype))$PlantID
+}
+
+#' Title
+#'
+#' @param gasbb.prod
+#' @param zones
+#'
+#' @return
+#' @export
+#'
+#' @examples
+gasbb_zones_delivery <- function(gasbb.prod,
+                                 zones=c("Roma", "Moomba", "Gippsland", "Port Campbell", "Ballera", "Victoria", "Sydney")){
+  f <- function(x, gasbb.prod) gasbb.prod %>%
+    group_gasbb(zone=x, flowdirection = "DELIVERY") %>%
+    rbind() #-> function for
+  purrr::map_df(zones, f, gasbb.prod=gasbb.prod)
 }
 
