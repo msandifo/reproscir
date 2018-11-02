@@ -253,8 +253,8 @@ plot_IMF_BP <- function(my.country = "World",
     geom_point(data=subset( wd.decade, decade !="70's"), size=11, aes(colour="black"), shape=21, fill="white",alpha=.5) +
     geom_text(data=subset( wd.decade,decade !="70's") ,aes(label=decade),colour="black", hjust=0.5, vjust=.5) +
     scale_colour_manual(values=c("firebrick2", "green4", "black","black")) +
-    labs(x=paste0("annual % change in GDP"),
-         y= "annual % change in emissions",
+    labs(x=paste0("annual % change in GDP (IMF WEO:", measure, ")"),
+         y= "BP Statistical Review 2018\nannual % change in energy emissions",
          subtitle=paste0(my.country, ", energy sector"),
          caption= paste0("data sourced from IMF (",measure,") and BP (fit from 1980-2007)"))+
     geom_hline(yintercept = paris, size=.25, linetype=2, colour=c("blue3", "red3"))+
