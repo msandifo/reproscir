@@ -33,3 +33,4 @@ lngtm2tjd <-function(n,date) {
 mtoe2j <- 4.1868e16
 j2tw <- 1/3.156e7/1e12
 tjd2mw <- 1e12/1e6/24/60/60
+tjday_to_mw <- function(...) tjd2mw(...)

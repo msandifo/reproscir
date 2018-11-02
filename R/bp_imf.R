@@ -1,3 +1,21 @@
+#' returns sheets in BP file
+#'
+#' @param filename
+#'
+#' @return
+#' @export
+#'
+#' @examples
+BP_sheets <- function( filename=BP2018_download(), search=NULL ){
+
+
+   bp.names = readxl::excel_sheets(filename)
+  # print(str(bp.names))
+   bp<- data.frame(sheet=seq(1,length(bp.names) ),name=bp.names)
+
+  if (is.null(search)) bp else
+   bp[ bp$name %>% stringr::str_detect(search) %>% which() ,]
+   }
 
 #' Title
 #'
@@ -6,7 +24,6 @@
 #' @param countries
 #' @param years
 #' @param na.rm
-#' @param perc
 #' @param verbose
 #' @param fuel
 #' @param units
@@ -14,13 +31,15 @@
 #' @return
 #' @export
 #'
-#' @examples
+#' @examples (BP_sheets( search=c("Oil.*Prod.*To"))$sheet %>%
+#' BP_all( sheet=., count=c("Aus", "Ven", "Russ", "US", "Sau")))$data %>%
+#' ggplot(aes(year, value, col=region))+
+#' geom_line()
 BP_all <- function( filename=BP2018_download(),
                     sheet=32,
                     countries=NA,
-                    years=1979:2017,
+                    years=1965:2017,
                     na.rm=TRUE,
-                    perc=F,
                     verbose=F,
                     fuel=NA,
                     units=NA){
@@ -29,16 +48,17 @@ BP_all <- function( filename=BP2018_download(),
   if ("UK" %in% countries) countries[countries=="UK"]<- "United Kingdom"
   if ("Russia" %in% countries) countries[countries=="Russia"]<- "Russian Federation"
    bp.names = readxl::excel_sheets(filename)
-  # print(str(bp.names))
-  bp.sheets <- data.frame(SHEET=seq(1,length(bp.names) ),NAME=bp.names)
+   bp.sheets <- data.frame(SHEET=seq(1,length(bp.names) ),NAME=bp.names)
   if (verbose) {
     print(bp.sheets)
     print(bp.sheets[sheet,])
   }
-  bp.data <-readxl::read_excel(filename, sheet = sheet, col_names = TRUE, col_types = NULL , na = "n/a",
+  bp.data <-readxl::read_xlsx(filename, sheet = sheet,
+                              col_names = TRUE, col_types = NULL ,
+                              na = c("N/A","NA","na","n/a",  "-"),
                        skip = 2)
-  bp.data <- bp.data[!is.na(  bp.data[,1] ),]
-  bp.data <-bp.data[ !is.na(  bp.data[,2] ),]
+#  bp.data <- bp.data[!is.na(  bp.data[,1] ),]
+ # bp.data <-bp.data[ !is.na(  bp.data[,2] ),]
   # bp.data[1]<- str_replace_all(bp.data[1], "Total", "")
 
   names(bp.data )[1] <- "region"
@@ -46,15 +66,17 @@ BP_all <- function( filename=BP2018_download(),
   bp.data$region<- stringr::str_replace(bp.data$region, "of which: ", "")
   bp.data<- bp.data[,  1:length(head( names(bp.data), -3))]  # drop last 2 columns whcih ahve percentages of total and increase relative to year before
 
-  bp.data <- tidyr::gather(bp.data,     YEAR, value, -region )
+  bp.data <- tidyr::gather(bp.data,     year, value, -region )
   names(bp.data)
-   bp.data$YEAR <- as.numeric(bp.data$YEAR)
+   bp.data$year <- as.numeric(bp.data$year)
 
   if (!is.na(fuel)) bp.data$fuel<-fuel
   if (!is.na(units)) bp.data$units<-units
   if(!is.na(countries[1])) bp.data<- subset(bp.data, region %in% countries)
-  if(!is.na(years[1])) bp.data<-subset(bp.data, YEAR %in% years)
-  bp.data <-bp.data %>% dplyr::select(year=YEAR, region, value)
+  # if(!is.na(countries[1])) bp.data<- bp.data %>% dplyr::filter(stringr::str_detect(region,countries))
+
+  if(!is.na(years[1])) bp.data<-subset(bp.data, year %in% years)
+  bp.data <-bp.data %>% dplyr::select(year=year ,region, value)
   bp.data$region[ bp.data$region=="United Kingdom"] ="UK"
 
   return(list(data=dplyr::as.tbl(bp.data), name=as.character(bp.sheets[sheet,]$NAME)))
@@ -76,7 +98,7 @@ BP_all <- function( filename=BP2018_download(),
  read_IMF <- function( country="World",
                       file= IMF2018_download(world=country=="World"),
                       measure = "NGDPRPPPPC",#"NGDP_RPCH",
-                      percent=T
+                      percent=F
 ) {
 
   if (country=="Total World") country="World"
@@ -87,12 +109,13 @@ BP_all <- function( filename=BP2018_download(),
   if (country == "Iran")   country = "Islamic Republic of Iran"
 
 
-  if (country=="World")  {measure = "NGDP_RPCH";
-  percent=F
-  #df = "/Volumes/data/data/global/economy/imf/WEOApr2018alla.xls"
-  country.index=3
-  year.index.start=9
-  measure.index=2
+  if (country=="World")  {
+    if (measure =="NGDPRPPPPC") measure = "NGDP_RPCH";
+   # percent=F
+    #df = "/Volumes/data/data/global/economy/imf/WEOApr2018alla.xls"
+    country.index=3
+    year.index.start=9
+    measure.index=2
   }
   else{
     #df = "/Volumes/data/data/global/economy/imf/WEOApr2018all.xls"
@@ -119,118 +142,58 @@ BP_all <- function( filename=BP2018_download(),
 
 
 
-#' Title
+#' #' Title
+#' #'
+#' #' @param country
+#' #' @param measure
+#' #' @param percent
+#' #' @param percap
+#' #' @param cum
+#' #' @param ratio
+#' #' @param fac
+#' #'
+#' #' @return
+#' #' @export
+#' #'
+#' #' @examples
+#' get_IMF<- function(country = "Australia", measure = "NGDP_RPCH",
+#'                    percent = FALSE, percap=F, cum=F, ratio=F, fac=NA ) {
 #'
-#' @param country
-#' @param measure
-#' @param percent
-#' @param percap
-#' @param cum
-#' @param ratio
-#' @param fac
+#'   sd <- reproscir::read_IMF(country = country, measure = measure[1] )
+#'   if (length(measure)>1) {
+#'     sd1 <- reproscir::read_IMF(country = country, measure = measure[2]) #, df = df)
+#'     if (ratio==F) {sd$df$IMF <- sd$df$IMF- sd1$df$IMF} else {sd$df$IMF <- sd$df$IMF / sd1$df$IMF}
+#'     if (ratio==F) {sd$subjectDescriptor<-  paste(sd$subjectDescriptor, '-',sd1$subjectDescriptor)} else {
+#'       sd$subjectDescriptor<-  paste(sd$subjectDescriptor, '/',sd1$subjectDescriptor)
+#'     }
+#'   }
+#'   if (percap==T & measure !="LP") {
+#'     pcap<- reproscir::read_IMF(country = country, measure = "LP" )
+#'     yeardiff <- sd$df$year[1]-pcap$df$year[1]   #assumes "LP" > measure
+#'     if (yeardiff> 0) sd$df$IMF<-sd$df$IMF/tail(pcap$df$IMF, -yeardiff) else sd$df$IMF<-sd$df$IMF/pcap$df$IMF
+#'     sd$subjectDescriptor<-  paste(sd$subjectDescriptor, '(per capita)')
+#'   }
+#'   if (percent == TRUE) {
+#'     sd$df = data.frame(year = sd$df$year[-1], IMF = diff(sd$df$IMF) * 100/sd$df$IMF[1:(length(sd$df$IMF) - 1)])
+#'     sd$scale = "annual % change"
+#'   }
+#'   if (is.list(fac)  ){
+#'     if (length(sd$df$IMF) < length(fac$df$IMF))  {
+#'       sd$df$IMF <- sd$df$IMF *tail(fac$df$IMF,-length(sd$df$IMF))
+#'     } else {
+#'       sd$df$IMF <- sd$df$IMF * fac$df$IMF
+#'     }
+#'     sd$units = "US tidyr::gatherrs"
+#'   }
 #'
-#' @return
-#' @export
+#'   if (cum==T) {
+#'     sd$df <- data.frame(year= sd$df$year, IMF=cumsum(sd$df$IMF))
+#'     sd$subjectDescriptor<-  paste(sd$subjectDescriptor, '- cumulative')
+#'   }
+#'   return(sd)
+#' }
 #'
-#' @examples
-get_IMF<- function(country = "Australia", measure = "NGDP_RPCH",
-                   percent = FALSE, percap=F, cum=F, ratio=F, fac=NA ) {
 
-  sd <- reproscir::read_IMF(country = country, measure = measure[1] )
-  if (length(measure)>1) {
-    sd1 <- reproscir::read_IMF(country = country, measure = measure[2]) #, df = df)
-    if (ratio==F) {sd$df$IMF <- sd$df$IMF- sd1$df$IMF} else {sd$df$IMF <- sd$df$IMF / sd1$df$IMF}
-    if (ratio==F) {sd$subjectDescriptor<-  paste(sd$subjectDescriptor, '-',sd1$subjectDescriptor)} else {
-      sd$subjectDescriptor<-  paste(sd$subjectDescriptor, '/',sd1$subjectDescriptor)
-    }
-  }
-  if (percap==T & measure !="LP") {
-    pcap<- reproscir::read_IMF(country = country, measure = "LP" )
-    yeardiff <- sd$df$year[1]-pcap$df$year[1]   #assumes "LP" > measure
-    if (yeardiff> 0) sd$df$IMF<-sd$df$IMF/tail(pcap$df$IMF, -yeardiff) else sd$df$IMF<-sd$df$IMF/pcap$df$IMF
-    sd$subjectDescriptor<-  paste(sd$subjectDescriptor, '(per capita)')
-  }
-  if (percent == TRUE) {
-    sd$df = data.frame(year = sd$df$year[-1], IMF = diff(sd$df$IMF) * 100/sd$df$IMF[1:(length(sd$df$IMF) - 1)])
-    sd$scale = "annual % change"
-  }
-  if (is.list(fac)  ){
-    if (length(sd$df$IMF) < length(fac$df$IMF))  {
-      sd$df$IMF <- sd$df$IMF *tail(fac$df$IMF,-length(sd$df$IMF))
-    } else {
-      sd$df$IMF <- sd$df$IMF * fac$df$IMF
-    }
-    sd$units = "US dollars"
-  }
-
-  if (cum==T) {
-    sd$df <- data.frame(year= sd$df$year, IMF=cumsum(sd$df$IMF))
-    sd$subjectDescriptor<-  paste(sd$subjectDescriptor, '- cumulative')
-  }
-  return(sd)
-}
-
-
-#' Title
-#'
-#' @param sd
-#' @param country
-#' @param measure
-#' @param df
-#' @param percent
-#' @param colour
-#' @param over
-#' @param plot
-#' @param percap
-#' @param cum
-#' @param ratio
-#' @param fac
-#'
-#' @return
-#' @export
-#'
-#' @examples
-plot_IMF <- function(sd=NA, country = "Australia", measure = "NGDP_RPCH",
-                     df = "/Users/msandifo/data/global/economy/IMF/WEOOct2018all.xls",
-                     percent = FALSE, colour="Red", over=F, plot=NA, percap=F, cum=F, ratio=F, fac=NA) {
-
-  if (is.list(sd)==F) {
-    sd <- get_IMF(country = country,
-                  measure = measure,
-                #  df = df,
-                  percent=percent,
-                  percap=percap,
-                  cum=cum,
-                  ratio=ratio,
-                  fac=fac)
-  }
-  if (over==F) p1 <- ggplot(data = sd$df, aes(x = year, y = IMF)) +
-      geom_line(colour = colour) +
-      geom_point(colour = colour, size = 3,
-                 alpha = 0.45) + ylab(paste(sd$units, "-", sd$scale)) + xlab("year") +
-      ggtitle(paste(sd$country, ":", sd$subjectDescriptor))
-
-  if (over==T) p1 <- plot + geom_line(data = sd$df, aes(x = year, y = IMF), colour = colour) +
-      geom_point(data = sd$df, aes(x = year, y = IMF), colour = colour, size = 3, alpha = 0.45) +
-      ylab(paste(sd$units, "-", sd$scale)) + xlab("year") +
-      ggtitle(paste(sd$country, ":", sd$subjectDescriptor))
-  show(p1)
-  return(p1)
-}
-
-
-#' Title
-#'
-#' @param country
-#'
-#' @return
-#' @export
-#'
-#' @examples
-exchange_IMF<-function(country){
-  imf<-get_IMF(country="Australia",mea=c("NGDPDPC","NGDPPC" ), ratio=T )
-  return(imf)
-}
 
 
 
@@ -243,33 +206,37 @@ exchange_IMF<-function(country){
 #' @export
 #'
 #' @examples
-plot_IMF_BP <- function(my.country = "World", measure="NGDPRPPPPC" , flag.years=NULL){
+plot_IMF_BP <- function(my.country = "World",
+                        measure="NGDPRPPPPC" ,
+                        years=1965:2017, sheet= 57,
+                        flag.years=NULL,
+                        percent=T){
   if  (my.country=="World") measure="NGDP_RPCH"
-  imf<-read_IMF(country=my.country, measure=measure)
-  print(imf)
+  imf<-read_IMF(country=my.country, measure=measure, percent=percent)
+  #print(imf)
   if (my.country == "US") imf$region=my.country
 
-  bp.t <-BP_all(sheet=57,countries=my.country,years=1965:2017, ver=T )
+  bp.t <-BP_all(sheet=sheet,countries=my.country,years=years, ver=F )
   bp <-bp.t
   paris<- Paris(country= my.country)
   paris.t<- Paris(country= my.country, total=T)
-  print(paris.t)
-  names(bp$data)[2]<- "region"
+  #print(paris.t)
+  #names(bp$data)[2]<- "region"
   bp$data$value <- c(NA, diff(bp$data$value)/head(bp$data$value, -1)*100 )
   wd <-merge(bp$data, imf, by=c("year", "region"))
   names(wd) <- c("year" ,"region","bp", "imf")
-  wd$years <- paste0("'", str_sub(as.character(wd$year),3,4) )
-  wd$decade <- paste0(str_sub(as.character(floor((wd$year-0)/10)*10),3,4), "'s")
+  wd$years <- paste0("'", stringr::str_sub(as.character(wd$year),3,4) )
+  wd$decade <- paste0(stringr::str_sub(as.character(floor((wd$year-0)/10)*10),3,4), "'s")
 
 
-  wd.decade <- wd %>% group_by(decade) %>% dplyr::summarise(bp=mean(bp, na.rm=T), imf=mean(imf, na.rm=T), years=years[1])
-  print(wd)
+  wd.decade <- wd %>% dplyr::group_by(decade) %>% dplyr::summarise(bp=mean(bp, na.rm=T), imf=mean(imf, na.rm=T), years=years[1])
+  #print(wd)
   wd %>% subset(year < 2008) %>%
     ggplot(aes( imf,bp) ) +
     geom_smooth(method="lm", se=T, fullrange=T, colour="black",
                 size=.4,  level = 0.995, linetype=5)+
-    geom_smooth(data=wd %>% subset(year >= 2008), method="lm", se=F, fullrange=T, colour="darkgreen",
-                size=.4,  level = 0.995, linetype=5)+
+    # geom_smooth(data=wd %>% subset(year >= 2008), method="lm", se=F, fullrange=T, colour="darkgreen",
+                # size=.4,  level = 0.995, linetype=5)+
     geom_point(shape=18, size=5, colour="white")+
     geom_point(shape=18, size=4)+
     geom_point(data=wd %>% subset(year >= 2008),  colour="white", shape=16, size=5)+
@@ -326,8 +293,8 @@ plot_IMF_BP <- function(my.country = "World", measure="NGDPRPPPPC" , flag.years=
              size=3,colour="black",
              vjust=-.3, fontface="italic", hjust=1) ->pb
 
-  return(grid.arrange(pa,pb, ncol=1, heights=2:1))
-
+#  return(gridExtra::grid.arrange(pa,pb, ncol=1, heights=2:1))
+return(list(p1=pa, p2=pb))
   # geom_segment(
   #   aes(x = 2.5, y = -1.5, xend =2.5, yend =-3.25),
   #   arrow = arrow(length = unit(0.03, "npc"),
