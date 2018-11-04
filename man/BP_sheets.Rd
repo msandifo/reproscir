@@ -4,10 +4,10 @@
 \alias{BP_sheets}
 \title{returns sheets in BP file}
 \usage{
-BP_sheets(filename = BP2018_download(), search = NULL)
+BP_sheets(filename = BP2018_download(), search = NULL, and = T)
 }
 \arguments{
-\item{filename}{}
+\item{and}{bool - for multiple search strings defaults to TRUE}
 }
 \description{
 returns sheets in BP file

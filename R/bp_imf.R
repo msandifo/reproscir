@@ -1,22 +1,27 @@
+
+
 #' returns sheets in BP file
 #'
 #' @param filename
+#' @param search
+#' @param and bool - for multiple search strings defaults to TRUE
 #'
 #' @return
 #' @export
 #'
 #' @examples
-BP_sheets <- function( filename=BP2018_download(), search=NULL ){
+BP_sheets <- function( filename=BP2018_download(), search=NULL , and=T){
 
-
-   bp.names = readxl::excel_sheets(filename)
-  # print(str(bp.names))
-   bp<- data.frame(sheet=seq(1,length(bp.names) ),name=bp.names)
+  if (is.character(search[1])) search <- stringr::str_to_lower(search)
+  if (is.character(search[1])) print(paste(search, collapse = '.*'))
+  bp.names <- readxl::excel_sheets(filename) %>% stringr::str_to_lower()
+  #   print(str(bp.names))
+  bp <- data.frame(sheet=seq(1,length(bp.names) ),name=bp.names)
 
   if (is.null(search)) bp else
-   bp[ bp$name %>% stringr::str_detect(search) %>% which() ,]
-   }
-
+    if (!and) bp[ bp$name %>% stringr::str_detect(search) %>% which() ,] else
+      bp[ bp$name %>% stringr::str_detect(paste(search, collapse = '.*')) %>% which() ,]
+}
 #' Title
 #'
 #' @param filename
@@ -25,8 +30,8 @@ BP_sheets <- function( filename=BP2018_download(), search=NULL ){
 #' @param years
 #' @param na.rm
 #' @param verbose
-#' @param fuel
-#' @param units
+#' @param data logical- output only data (tbl), otherwise list containing data (tbl) and name (character)
+#' @param units append a colum with units (chr)  to data (tbl)
 #'
 #' @return
 #' @export
@@ -41,14 +46,14 @@ BP_all <- function( filename=BP2018_download(),
                     years=1965:2017,
                     na.rm=TRUE,
                     verbose=F,
-                    fuel=NA,
+                    data=FALSE,
                     units=NA){
 
 
   if ("UK" %in% countries) countries[countries=="UK"]<- "United Kingdom"
   if ("Russia" %in% countries) countries[countries=="Russia"]<- "Russian Federation"
    bp.names = readxl::excel_sheets(filename)
-   bp.sheets <- data.frame(SHEET=seq(1,length(bp.names) ),NAME=bp.names)
+   bp.sheets <- data.frame(sheet=seq(1,length(bp.names) ),name=bp.names)
   if (verbose) {
     print(bp.sheets)
     print(bp.sheets[sheet,])
@@ -66,20 +71,24 @@ BP_all <- function( filename=BP2018_download(),
   bp.data$region<- stringr::str_replace(bp.data$region, "of which: ", "")
   bp.data<- bp.data[,  1:length(head( names(bp.data), -3))]  # drop last 2 columns whcih ahve percentages of total and increase relative to year before
 
-  bp.data <- tidyr::gather(bp.data,     year, value, -region )
-  names(bp.data)
-   bp.data$year <- as.numeric(bp.data$year)
+  bp.data <- tidyr::gather(bp.data,     year, value, -region ) %>% subset(!is.na(region))
+  #names(bp.data)
+  bp.data$year <- as.numeric(bp.data$year)
+#print(bp.sheets[sheet,]$name)
 
-  if (!is.na(fuel)) bp.data$fuel<-fuel
-  if (!is.na(units)) bp.data$units<-units
-  if(!is.na(countries[1])) bp.data<- subset(bp.data, region %in% countries)
+   if(!is.na(countries[1])) bp.data<- subset(bp.data, region %in% countries) %>% dplyr::arrange(region)
   # if(!is.na(countries[1])) bp.data<- bp.data %>% dplyr::filter(stringr::str_detect(region,countries))
 
   if(!is.na(years[1])) bp.data<-subset(bp.data, year %in% years)
   bp.data <-bp.data %>% dplyr::select(year=year ,region, value)
+  if (!is.na(units)) bp.data$units<-units
   bp.data$region[ bp.data$region=="United Kingdom"] ="UK"
 
-  return(list(data=dplyr::as.tbl(bp.data), name=as.character(bp.sheets[sheet,]$NAME)))
+  if ( data==T) {
+    bp.data$fuel<- collapse_to_lower(bp.sheets[sheet,]$name)
+    return(bp.data)
+    } else
+    return(list(data=dplyr::as.tbl(bp.data), name=as.character(bp.sheets[sheet,]$name)))
 
 }
 
@@ -95,9 +104,9 @@ BP_all <- function( filename=BP2018_download(),
 #' @export
 #'
 #' @examples
- read_IMF <- function( country="World",
+ read_IMF <- function( country="World",measure = "NGDPRPPPPC",#"NGDP_RPCH",
                       file= IMF2018_download(world=country=="World"),
-                      measure = "NGDPRPPPPC",#"NGDP_RPCH",
+
                       percent=F
 ) {
 
@@ -136,63 +145,12 @@ BP_all <- function( filename=BP2018_download(),
   my.df$region <- country
   my.df$region[my.df$region=="United States"] ="US"
   my.df$region[my.df$region=="United Kingdom"] ="UK"
-
+  my.df$measure=measure
   my.df
 }
 
 
 
-#' #' Title
-#' #'
-#' #' @param country
-#' #' @param measure
-#' #' @param percent
-#' #' @param percap
-#' #' @param cum
-#' #' @param ratio
-#' #' @param fac
-#' #'
-#' #' @return
-#' #' @export
-#' #'
-#' #' @examples
-#' get_IMF<- function(country = "Australia", measure = "NGDP_RPCH",
-#'                    percent = FALSE, percap=F, cum=F, ratio=F, fac=NA ) {
-#'
-#'   sd <- reproscir::read_IMF(country = country, measure = measure[1] )
-#'   if (length(measure)>1) {
-#'     sd1 <- reproscir::read_IMF(country = country, measure = measure[2]) #, df = df)
-#'     if (ratio==F) {sd$df$IMF <- sd$df$IMF- sd1$df$IMF} else {sd$df$IMF <- sd$df$IMF / sd1$df$IMF}
-#'     if (ratio==F) {sd$subjectDescriptor<-  paste(sd$subjectDescriptor, '-',sd1$subjectDescriptor)} else {
-#'       sd$subjectDescriptor<-  paste(sd$subjectDescriptor, '/',sd1$subjectDescriptor)
-#'     }
-#'   }
-#'   if (percap==T & measure !="LP") {
-#'     pcap<- reproscir::read_IMF(country = country, measure = "LP" )
-#'     yeardiff <- sd$df$year[1]-pcap$df$year[1]   #assumes "LP" > measure
-#'     if (yeardiff> 0) sd$df$IMF<-sd$df$IMF/tail(pcap$df$IMF, -yeardiff) else sd$df$IMF<-sd$df$IMF/pcap$df$IMF
-#'     sd$subjectDescriptor<-  paste(sd$subjectDescriptor, '(per capita)')
-#'   }
-#'   if (percent == TRUE) {
-#'     sd$df = data.frame(year = sd$df$year[-1], IMF = diff(sd$df$IMF) * 100/sd$df$IMF[1:(length(sd$df$IMF) - 1)])
-#'     sd$scale = "annual % change"
-#'   }
-#'   if (is.list(fac)  ){
-#'     if (length(sd$df$IMF) < length(fac$df$IMF))  {
-#'       sd$df$IMF <- sd$df$IMF *tail(fac$df$IMF,-length(sd$df$IMF))
-#'     } else {
-#'       sd$df$IMF <- sd$df$IMF * fac$df$IMF
-#'     }
-#'     sd$units = "US tidyr::gatherrs"
-#'   }
-#'
-#'   if (cum==T) {
-#'     sd$df <- data.frame(year= sd$df$year, IMF=cumsum(sd$df$IMF))
-#'     sd$subjectDescriptor<-  paste(sd$subjectDescriptor, '- cumulative')
-#'   }
-#'   return(sd)
-#' }
-#'
 
 
 

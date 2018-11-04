@@ -4,8 +4,8 @@
 \alias{read_IMF}
 \title{Title}
 \usage{
-read_IMF(country = "World", file = IMF2018_download(world = country ==
-  "World"), measure = "NGDPRPPPPC", percent = F)
+read_IMF(country = "World", measure = "NGDPRPPPPC",
+  file = IMF2018_download(world = country == "World"), percent = F)
 }
 \arguments{
 \item{percent}{}

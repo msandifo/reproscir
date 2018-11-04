@@ -64,3 +64,53 @@ set_month_day <-function(date, day=15) {
   date+lubridate::days(day-lubridate::mday(date))
 }
 
+
+#' Title
+#'
+#' @param name
+#' @param collapse
+#' @param drop
+#' @param remove
+#'
+#' @return
+#' @export
+#'
+#' @examples
+collapse_to_lower<- function(name, collapse=".", drop=1, remove="-"){
+  stringr::str_to_lower(name) %>% stringr::str_remove(remove) %>%
+    stringr::str_split("\\s+") %>% unlist() %>% head(-drop) %>% paste(collapse=collapse)
+}
+
+
+
+create_twitter <- function(directory="/Volumes/data/Dropbox/msandifo/documents/programming/r/twitter/2018/", name="000", remove=F){
+
+  full.name=paste0(directory,"/", name) %>%stringr::str_replace_all("//", "/")
+  if (dir.exists(full.name))
+  { if (remove) file.remove(full.name,recursive=T) else
+    message("directory already exists")
+    }
+
+if (!dir.exists(full.name)){
+  dir.create(full.name, recursive=T)
+  dir.create(paste0(full.name, "/src"))
+  dir.create(paste0(full.name, "/figs"))
+  dir.create(paste0(full.name, "/data"))
+  setwd(full.name)
+  rstudioapi::initializeProject(path = getwd())
+  rmd_template(name) %>% cat(file="Readme.Rmd")
+  output_template(name) %>% cat(file="./src/outputs.R")
+  plots_template(name) %>% cat(file="./src/plots.R")
+ downloads_template(name) %>% cat(file="./src/downloads.R")
+plan_template(name) %>% cat(file="./src/plan.R")
+functions_template(name) %>% cat(file="./src/functions.R")
+packages_template(name) %>% cat(file="./src/packages.R")
+settings_template(name) %>% cat(file="./src/settings.R")
+theme_template(name) %>% cat(file="./src/theme.R")
+drake_template(name) %>% cat(file="drake.R")
+
+  "" %>% cat(file="./src/downloads.R")
+  ""
+}
+}
+

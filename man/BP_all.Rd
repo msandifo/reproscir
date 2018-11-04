@@ -5,11 +5,13 @@
 \title{Title}
 \usage{
 BP_all(filename = BP2018_download(), sheet = 32, countries = NA,
-  years = 1965:2017, na.rm = TRUE, verbose = F, fuel = NA,
+  years = 1965:2017, na.rm = TRUE, verbose = F, data = FALSE,
   units = NA)
 }
 \arguments{
-\item{units}{}
+\item{data}{logical- output only data (tbl), otherwise list containing data (tbl) and name (character)}
+
+\item{units}{append a colum with units (chr)  to data (tbl)}
 }
 \description{
 Title
