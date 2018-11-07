@@ -93,11 +93,25 @@ read_gladstone_year <- function(years=2015:lubridate::year(Sys.Date()),
 #' @examples
 update_gladstone <- function(local.path=NULL,
                              years=2015:lubridate::year(Sys.Date()),
-                             update=F){
+                             update=T){
   local.path=validate_directory(local.path, folder="gladstone")
   gladstone.file = paste0(local.path, "/", "lng.Rdata")
-  if (!file.exists(gladstone.file) || update==TRUE) {
+  if (!file.exists(gladstone.file)) {
     read_gladstone_year(years=years ) -> lng
     save(lng, file=gladstone.file )} else load(gladstone.file)
-  lng %>%  subset( !is.na(tonnes))
+ lng<- lng %>%  subset( !is.na(tonnes))
+
+
+  if (update) {
+    last.month <- lng$month
+    last.year <-  lng$year
+    next.year<- last.year
+    while (day.dif >15+30+6) {  #note that GPA  Cargo sttas are usuall not posted until at least 5 days into follwoing month
+      next.month<-  (last.month+1)
+      if (next.month==13) {next.month<- 1; next.year<- next.year+1}
+      day.dif<- day.dif-zoo::as.yearmon("2007-12") %>% lubridate::days_in_month()
+      lng <-rbind(lng, read_gladstone_ports(year=next.year, month=next.month, fuel="Liquefied Natural Gas", country="Total" ) )
+      save(lng, file=gladstone.file )}
+  }
+ lng
 }
