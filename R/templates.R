@@ -1,4 +1,78 @@
-rmd_template <- function(  name) {  templates::tmpl("---
+
+#' Title
+#'
+#' @param name
+#' @param directory
+#' @param remove
+#'
+#' @return
+#' @export
+#'
+#' @examples
+create_twitter <- function(name="000",directory="/Volumes/data/Dropbox/msandifo/documents/programming/r/twitter/2018/",  remove=F){
+create_drake(name, directory,remove)
+  }
+
+#' Title
+#'
+#' @param directory
+#' @param name
+#' @param remove
+#'
+#' @return
+#' @export
+#'
+#' @examples
+create_drake <- function(name="000",directory="/Volumes/data/Dropbox/msandifo/documents/programming/r/2018/drake/",   remove=F){
+
+  full.name=paste0(directory,"/", name) %>%stringr::str_replace_all("//", "/")
+  if (dir.exists(full.name))
+  { if (remove) unlink(full.name, recursive=T) else
+    message("directory already exists")
+  }
+   if (!dir.exists(full.name)){
+
+    dir.create(full.name, recursive=T)
+
+    dir.create(paste0(full.name, "/src"))
+    dir.create(paste0(full.name, "/figs"))
+    dir.create(paste0(full.name, "/data"))
+    setwd(full.name)
+
+    rstudioapi::initializeProject(path = getwd())
+
+    rmd_template(name) %>% cat(file="Readme.Rmd")
+
+    outputs_template(name) %>% cat(file="./src/outputs.R")
+    print("---")
+    plots_template(name) %>% cat(file="./src/plots.R")
+    print("---")
+    downloads_template(name) %>% cat(file="./src/downloads.R")
+    plan_template(name) %>% cat(file="./src/plan.R")
+    functions_template(name) %>% cat(file="./src/functions.R")
+    print("--")
+    packages_template(name) %>% cat(file="./src/packages.R")
+    settings_template(name) %>% cat(file="./src/settings.R")
+    theme_template(name) %>% cat(file="./src/theme.R")
+    drake_template(name) %>% cat(file="drake.R")
+
+    # "" %>% cat(file="./src/downloads.R")
+    # ""
+   }
+
+  openProject(path =  getwd(), newSession = FALSE)
+}
+
+#' Title
+#'
+#' @param name
+#'
+#' @return
+#' @export
+#'
+#' @examples
+rmd_template <- function(  name) {
+templates::tmpl("---
 title: '{{name}}'
 output: github_document
 always_allow_html: yes
@@ -95,6 +169,14 @@ p{{name}}<-drake::readd(p{{name}})
 name=name)
 }
 
+#' Title
+#'
+#' @param ...
+#'
+#' @return
+#' @export
+#'
+#' @examples
 drake_template<- function(...) {
   "
     full.repro=T
@@ -115,6 +197,14 @@ drake_template<- function(...) {
 
 }
 
+#' Title
+#'
+#' @param ...
+#'
+#' @return
+#' @export
+#'
+#' @examples
 settings_template<- function(...) {
 "if (!exists('full.repro')) full.repro=T
 library(drake)
@@ -128,16 +218,32 @@ setwd(drake.path)
 }
 
 
+#' Title
+#'
+#' @param name
+#'
+#' @return
+#' @export
+#'
+#' @examples
 outputs_template <- function(name)
 {
   templates::tmpl("p{{name}}<-drake::readd(p{{name}})
-  ggsave('./figs/p{{name}}_01.png',  p{{name}}$p1 ,width=8, height=5) ", name=name)
+  ggsave('./figs/p{{name}}_01.png',  p{{name}}$p1 ,width=8, height=5)
   merged.data<-drake::readd(merged.data)
-  save(merged.data, file="data/data.Rdata")
+  save(merged.data, file='data/data.Rdata')", name=name)
 
 }
 
 
+#' Title
+#'
+#' @param ...
+#'
+#' @return
+#' @export
+#'
+#' @examples
 packages_template<- function(...){
   "# packages neded
   # tidyverse, lubridate, rvest, rappdirs, data.table, fasttime, purrr, hrbrthemes
@@ -156,6 +262,14 @@ packages_template<- function(...){
 
 }
 
+#' Title
+#'
+#' @param name
+#'
+#' @return
+#' @export
+#'
+#' @examples
 plan_template <- function(name){
   templates::tmpl(
     "#--------
@@ -172,6 +286,14 @@ reproplan = drake::drake_plan(
 ", name=name )
 }
 
+#' Title
+#'
+#' @param name
+#'
+#' @return
+#' @export
+#'
+#' @examples
 downloads_template <- function(name){
 templates::tmpl("#-----
 # {{name}} download
@@ -180,11 +302,27 @@ templates::tmpl("#-----
 ", name=name)
 }
 
+#' Title
+#'
+#' @param ...
+#'
+#' @return
+#' @export
+#'
+#' @examples
 functions_template <- function(...){
   "`%ni%` = Negate(`%in%`) "
 }
 
 
+#' Title
+#'
+#' @param ...
+#'
+#' @return
+#' @export
+#'
+#' @examples
 plots_template <- function(...){
 "library(ggplot2)
 # --------------------
@@ -199,6 +337,14 @@ return (list(p1=p01  )
 }"
 }
 
+#' Title
+#'
+#' @param ...
+#'
+#' @return
+#' @export
+#'
+#' @examples
 theme_template <- function(...){
   "
 

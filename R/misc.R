@@ -83,34 +83,49 @@ collapse_to_lower<- function(name, collapse=".", drop=1, remove="-"){
 
 
 
-create_twitter <- function(directory="/Volumes/data/Dropbox/msandifo/documents/programming/r/twitter/2018/", name="000", remove=F){
 
-  full.name=paste0(directory,"/", name) %>%stringr::str_replace_all("//", "/")
-  if (dir.exists(full.name))
-  { if (remove) file.remove(full.name,recursive=T) else
-    message("directory already exists")
-    }
+#' Title
+#'
+#' @param df
+#'
+#' @return
+#' @export
+#'
+#' @examples
+cagr<- function(df){
+  #message('calculated annual growth rate')
+  last.year<-tail(df$year,1)
+  first.year<-df$year[1]
+  n<-last.year-first.year
+  last.value<-tail(df$value,1)
+  first.value<-df$value[1]
 
-if (!dir.exists(full.name)){
-  dir.create(full.name, recursive=T)
-  dir.create(paste0(full.name, "/src"))
-  dir.create(paste0(full.name, "/figs"))
-  dir.create(paste0(full.name, "/data"))
-  setwd(full.name)
-  rstudioapi::initializeProject(path = getwd())
-  rmd_template(name) %>% cat(file="Readme.Rmd")
-  output_template(name) %>% cat(file="./src/outputs.R")
-  plots_template(name) %>% cat(file="./src/plots.R")
- downloads_template(name) %>% cat(file="./src/downloads.R")
-plan_template(name) %>% cat(file="./src/plan.R")
-functions_template(name) %>% cat(file="./src/functions.R")
-packages_template(name) %>% cat(file="./src/packages.R")
-settings_template(name) %>% cat(file="./src/settings.R")
-theme_template(name) %>% cat(file="./src/theme.R")
-drake_template(name) %>% cat(file="drake.R")
+  cagr<- 100*(((last.value/first.value)^(1/n))-1)
 
-  "" %>% cat(file="./src/downloads.R")
-  ""
+  # cagr<- 100*(LastYearV-FirstYearV)/FirstYearV/(n)
+  message("cagr ", signif(cagr,3), "% applies from ", first.year," to ", last.year)
+  return(cagr)
 }
+
+#' Title
+#'
+#' @param data.df
+#' @param gr
+#' @param n
+#'
+#' @return
+#' @export
+#'
+#' @examples
+project_cagr<- function(df, gr=NA, n=40){
+  if (is.na(gr)) gr<- cagr(df)
+
+  gr.i<- purrr::imap_dbl(rep(1,n), ~.x*((1.+ gr/100)^.y))
+
+   data.frame(year=seq(1:n) + tail(df$year,1),
+                region=tail(df$region,1),
+                value=gr.i*tail(df$value,1)
+  )
+
 }
 

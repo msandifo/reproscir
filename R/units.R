@@ -25,12 +25,21 @@ lng_tm_to_tjd <-function(n,date) {
   n*8.97/172/lubridate::days_in_month(date)
 }
 
+
 lngtm2tjd <-function(n,date) {
   n*8.97/172/lubridate::days_in_month(date)
 }
 
 
+#' @export
 mtoe2j <- 4.1868e16
+
+#' @export
 j2tw <- 1/3.156e7/1e12
+
+#' @export
 tjd2mw <- 1e12/1e6/24/60/60
-tjday_to_mw <- function(...) tjd2mw(...)
+
+#' @export
+tjday_to_mw <- function(x) {x*tjd2mw}
+
