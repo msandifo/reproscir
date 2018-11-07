@@ -2,7 +2,6 @@
 # Dummy object, only required for name resolution.
 
 
-
 #' @export
 set<- structure(list(), class = 'set')
 

@@ -91,10 +91,12 @@ read_gladstone_year <- function(years=2015:lubridate::year(Sys.Date()),
 #' @export
 #'
 #' @examples
-update_gladstone <- function(local.path=NULL, years=2015:lubridate::year(Sys.Date())){
+update_gladstone <- function(local.path=NULL,
+                             years=2015:lubridate::year(Sys.Date()),
+                             update=F){
   local.path=validate_directory(local.path, folder="gladstone")
   gladstone.file = paste0(local.path, "/", "lng.Rdata")
-  if (!file.exists(gladstone.file)) {
+  if (!file.exists(gladstone.file) || update==TRUE) {
     read_gladstone_year(years=years ) -> lng
     save(lng, file=gladstone.file )} else load(gladstone.file)
   lng %>%  subset( !is.na(tonnes))

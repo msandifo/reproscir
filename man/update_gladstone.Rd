@@ -5,7 +5,7 @@
 \title{Title}
 \usage{
 update_gladstone(local.path = NULL,
-  years = 2015:lubridate::year(Sys.Date()))
+  years = 2015:lubridate::year(Sys.Date()), update = F)
 }
 \arguments{
 \item{years}{}
