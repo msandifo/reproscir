@@ -5,7 +5,7 @@
 \title{updates data ste by downloading latest version}
 \usage{
 update_data(data.set = "cdiac", yaml = Sys.getenv("R_DATAYAML"),
-  verbose = T)
+  csv = T, wget = T, verbose = T, directory = NULL)
 }
 \arguments{
 \item{verbose}{}

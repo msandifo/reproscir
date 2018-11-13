@@ -43,3 +43,18 @@ tjd2mw <- 1e12/1e6/24/60/60
 #' @export
 tjday_to_mw <- function(x) {x*tjd2mw}
 
+#' @export
+cf2j <- 1055055.8526
+
+#' @export
+tj2cf <- 947817.120313
+
+
+
+#' @export
+cm2bbl <-  6.2898
+
+#' @export
+syd.harbour = 562e6 # cubic metres
+
+

@@ -5,7 +5,7 @@
 \title{reads  data.set into}
 \usage{
 read_data(data.set = "cdiac", yaml = Sys.getenv("R_DATAYAML"),
-  data = F, verbose = F)
+  data = F, verbose = F, directory = NULL)
 }
 \arguments{
 \item{verbose}{}

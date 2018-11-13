@@ -27,7 +27,7 @@ validate_directory <- function(destination_directory, folder="aemo") {
 #'
 #' @return charcater vector in ymd order
 #' @export
-#'
+#' @import magrittr
 #' @examples
 reorder_dmy <-function(dates){
   my.locs<-stringr::str_locate(dates, c("/" ))

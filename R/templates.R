@@ -60,7 +60,7 @@ create_drake <- function(name="000",directory="/Volumes/data/Dropbox/msandifo/do
     # ""
    }
 
-  openProject(path =  getwd(), newSession = FALSE)
+  rstudioapi::openProject(path =  getwd(), newSession = FALSE)
 }
 
 #' Title
