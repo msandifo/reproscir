@@ -5,7 +5,7 @@
 \title{Title}
 \usage{
 BP_all(filename = BP2018_download(), sheet = 32, countries = NA,
-  years = 1965:2017, na.rm = TRUE, verbose = F, data = FALSE,
+  years = 1965:2018, na.rm = TRUE, verbose = F, data = FALSE,
   units = NA)
 }
 \arguments{

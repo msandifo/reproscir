@@ -43,7 +43,7 @@ BP_sheets <- function( filename=BP2018_download(), search=NULL , and=T){
 BP_all <- function( filename=BP2018_download(),
                     sheet=32,
                     countries=NA,
-                    years=1965:2017,
+                    years=1965:2018,
                     na.rm=TRUE,
                     verbose=F,
                     data=FALSE,
@@ -70,7 +70,8 @@ BP_all <- function( filename=BP2018_download(),
   bp.data$region<- stringr::str_replace(bp.data$region, "Total ", "")
   bp.data$region<- stringr::str_replace(bp.data$region, "of which: ", "")
   bp.data<- bp.data[,  1:length(head( names(bp.data), -3))]  # drop last 2 columns whcih ahve percentages of total and increase relative to year before
-
+names( bp.data  ) <- stringr::str_sub (names( bp.data) ,1,4 )
+names(bp.data )[1] <- "region"
   bp.data <- tidyr::gather(bp.data,     year, value, -region ) %>% subset(!is.na(region))
   #names(bp.data)
   bp.data$year <- as.numeric(bp.data$year)
@@ -113,7 +114,7 @@ BP_all <- function( filename=BP2018_download(),
   if (country=="Total World") country="World"
   if (country=="US") country="United States"
   if (country == "UK") country = "United Kingdom"
-  if (country == "Russia")  country = "Russian Federation"
+  if (country == "Russia")  country = "Russia"
   if (country == "South Korea")   country = "Korea"
   if (country == "Iran")   country = "Islamic Republic of Iran"
 
@@ -145,6 +146,8 @@ BP_all <- function( filename=BP2018_download(),
   my.df$region <- country
   my.df$region[my.df$region=="United States"] ="US"
   my.df$region[my.df$region=="United Kingdom"] ="UK"
+  my.df$region[my.df$region=="Russia"] ="Russian Federation"
+
   my.df$measure=measure
   my.df
 }
@@ -152,7 +155,52 @@ BP_all <- function( filename=BP2018_download(),
 
 
 
+#' Title
+#'
+#' @param my.country
+#' @param measure
+#' @param years
+#' @param sheet
+#' @param flag.years
+#' @param percent
+#'
+#' @return
+#' @export
+#'
+#' @examples
+get_IMF_BP <- function(my.country = "World",
+                          measure="NGDPRPPPPC" ,
+                          years=1965:2018,
+                          sheet= 65,
+                          flag.years=NULL,
+                          percent=T ){
 
+    if  (my.country=="World") {measure="NGDP_RPCH"
+    percent=F}
+
+    imf<-read_IMF(country=my.country, measure=measure, percent=percent)
+    #print(imf)
+    if (my.country == "US") imf$region=my.country
+
+    bp.t <-BP_all(sheet=sheet,countries=my.country,years=years, ver=F )
+    bp <-bp.t
+    paris<- Paris(country= my.country, year=c(2005,tail(years,1)) )
+    paris.t<- Paris(country= my.country, year=c(2005,tail(years,1)), total=T)
+    #print(paris.t)
+    #names(bp$data)[2]<- "region"
+    bp$data$value <- c(NA, diff(bp$data$value)/head(bp$data$value, -1)*100 )
+    wd <-merge(bp$data, imf, by=c("year", "region"))
+    names(wd) <- c("year" ,"region","bp", "imf", "measure")
+    wd$years <- paste0("'", stringr::str_sub(as.character(wd$year),3,4) )
+    wd$decade <- paste0(stringr::str_sub(as.character(floor((wd$year-0)/10)*10),3,4), "'s")
+
+
+    wd.decade <- wd %>% dplyr::group_by(decade) %>%
+      dplyr::summarise(bp=mean(bp, na.rm=T), imf=mean(imf, na.rm=T), years=years[1])
+
+    list(wd=wd,  wd.decade =wd.decade, bp.t=bp.t, bp=bp,
+         paris=paris, paris.t=paris.t, my.country =my.country,measure=measure, years=years)
+}
 
 
 #' Title
@@ -164,70 +212,114 @@ BP_all <- function( filename=BP2018_download(),
 #' @export
 #'
 #' @examples
-plot_IMF_BP <- function(my.country = "World",
+plot_IMF_BP <- function(df =NA,
+                        my.country = "World",
                         measure="NGDPRPPPPC" ,
-                        years=1965:2017, sheet= 57,
+                        years=1965:2018, sheet= 65,
                         flag.years=NULL,
-                        percent=T){
-  if  (my.country=="World") measure="NGDP_RPCH"
-  imf<-read_IMF(country=my.country, measure=measure, percent=percent)
-  #print(imf)
-  if (my.country == "US") imf$region=my.country
+                        percent=T,
+                        labels=T,
+                        repel=T,
+                        flag.colour="firebrick3",
+                        flag.size=5,
+                        flag.shape=18,
+                        group=NULL){
 
-  bp.t <-BP_all(sheet=sheet,countries=my.country,years=years, ver=F )
-  bp <-bp.t
-  paris<- Paris(country= my.country)
-  paris.t<- Paris(country= my.country, total=T)
-  #print(paris.t)
-  #names(bp$data)[2]<- "region"
-  bp$data$value <- c(NA, diff(bp$data$value)/head(bp$data$value, -1)*100 )
-  wd <-merge(bp$data, imf, by=c("year", "region"))
-  names(wd) <- c("year" ,"region","bp", "imf")
-  wd$years <- paste0("'", stringr::str_sub(as.character(wd$year),3,4) )
-  wd$decade <- paste0(stringr::str_sub(as.character(floor((wd$year-0)/10)*10),3,4), "'s")
+  `%ni%` <-Negate(`%in%`)
+if (is.na(df[1])){
 
+  df<- get_IMF_BP  (my.country = my.country,
+  measure=measure ,
+  years=years,
+  sheet= sheet,
+  percent=percent)
+  # if  (my.country=="World") {measure="NGDP_RPCH"
+  # percent=F}
+  #
+  # imf<-read_IMF(country=my.country, measure=measure, percent=percent)
+  # #print(imf)
+  # if (my.country == "US") imf$region=my.country
+  #
+  # bp.t <-BP_all(sheet=sheet,countries=my.country,years=years, ver=F )
+  # bp <-bp.t
+  # paris<- Paris(country= my.country, year=tail(years,1))
+  # paris.t<- Paris(country= my.country, year=tail(years,1), total=T)
+  # #print(paris.t)
+  # #names(bp$data)[2]<- "region"
+  # bp$data$value <- c(NA, diff(bp$data$value)/head(bp$data$value, -1)*100 )
+  # wd <-merge(bp$data, imf, by=c("year", "region"))
+  # names(wd) <- c("year" ,"region","bp", "imf", "measure")
+  # wd$years <- paste0("'", stringr::str_sub(as.character(wd$year),3,4) )
+  # wd$decade <- paste0(stringr::str_sub(as.character(floor((wd$year-0)/10)*10),3,4), "'s")
+  #
+  #
+  # wd.decade <- wd %>% dplyr::group_by(decade) %>%
+  #   dplyr::summarise(bp=mean(bp, na.rm=T), imf=mean(imf, na.rm=T), years=years[1])
+}
 
-  wd.decade <- wd %>% dplyr::group_by(decade) %>% dplyr::summarise(bp=mean(bp, na.rm=T), imf=mean(imf, na.rm=T), years=years[1])
-  #print(wd)
-  wd %>% subset(year < 2008) %>%
-    ggplot(aes( imf,bp) ) +
-    geom_smooth(method="lm", se=T, fullrange=T, colour="black",
+  wd=df$wd %>% subset(year  %in% df$years)
+  wd.decade =df$wd.decade
+  paris=df$paris
+  paris.t=df$paris.t
+  my.country =df$my.country
+  measure=df$measure
+   bp.t=df$bp.t
+  bp=df$bp
+
+  #print(bp)
+ pa <- wd %>% subset(year < 2008) %>%
+    ggplot(aes( imf,bp ) ) +
+    geom_smooth(  , method="lm", se=F, fullrange=T, #colour="black",
                 size=.4,  level = 0.995, linetype=5)+
     # geom_smooth(data=wd %>% subset(year >= 2008), method="lm", se=F, fullrange=T, colour="darkgreen",
-                # size=.4,  level = 0.995, linetype=5)+
+    # size=.4,  level = 0.995, linetype=5)+
     geom_point(shape=18, size=5, colour="white")+
     geom_point(shape=18, size=4)+
     geom_point(data=wd %>% subset(year >= 2008),  colour="white", shape=16, size=5)+
-    geom_point(data=wd %>% subset(year >= 2008), aes(colour=decade), shape=16, size=4)+
-    ggrepel::geom_text_repel(data=wd %>% subset(year >= 2008),
+    geom_point(data=wd %>% subset(year >= 2008), aes(colour=decade), shape=16, size=4)
+    if ( repel) pa <- pa + ggrepel::geom_text_repel(data=wd %>% subset(year >= 2008 & year %ni% flag.years),
                              aes(label=years,colour=decade),
                              fontface = 'bold',
                              nudge_y =  ifelse(wd$bp[wd$year>=2008] > 1. , 1, -.6),
                              nudge_x =  ifelse(wd$bp[wd$year>=2008] > 1. , -.5, .35),
                              force=30,
                              max.iter = 1e3,
-                             size=5)+
-    theme(legend.position = "NONE") +
-    geom_point(data=subset( wd.decade, decade !="70's"), size=11, aes(colour="black"), shape=21, fill="white",alpha=.5) +
-    geom_text(data=subset( wd.decade,decade !="70's") ,aes(label=decade),colour="black", hjust=0.5, vjust=.5) +
-    scale_colour_manual(values=c("firebrick2", "green4", "black","black")) +
+                             size=5, show.legend = F)
+
+   pa <- pa+ theme(legend.position = "NONE") +
+     scale_colour_manual(values=c("firebrick2", "green4", "black","grey40", "yellow")) +
     labs(x=paste0("annual % change in GDP (IMF WEO:", measure, ")"),
-         y= "BP Statistical Review 2018\nannual % change in energy emissions",
+         y= "BP Statistical Review 2019\nannual % change in energy emissions",
          subtitle=paste0(my.country, ", energy sector"),
          caption= paste0("data sourced from IMF (",measure,") and BP (fit from 1980-2007)"))+
-    geom_hline(yintercept = paris, size=.25, linetype=2, colour=c("blue3", "red3"))+
+    geom_hline(yintercept = paris[1], size=.25, linetype=2, colour=c("blue3" ))+
     annotate("text", y=paris[1], x=max( wd$imf, na.rm=T),
              # label="Energy sector Paris commitments*",
              label=paste0(round(paris[1],1), "% p.a. for 26% reduction on 2005 levels by 2030"),
              size=3,colour="blue3",
-             vjust=-.3, fontface="italic", hjust=1)+
-    annotate("text", y=paris[2], x=max( wd$imf, na.rm=T),
-             # label="Energy sector Paris commitments*",
-             label=paste0(round(paris[2],1), "% p.a. for 28% reduction on 2005 levels by 2030"),
-             size=3,colour="red3",
-             vjust=1.2, fontface="italic", hjust=1) -> pa
+             vjust=-.3, fontface="italic", hjust=1)
+  #  p1+  geom_hline(yintercept = paris[1], size=.25, linetype=2, colour=c("blue3", "red3"))+
+  #   annotate("text", y=paris[2], x=max( wd$imf, na.rm=T),
+  #            # label="Energy sector Paris commitments*",
+  #            label=paste0(round(paris[2],1), "% p.a. for 28% reduction on 2005 levels by 2030"),
+  #            size=3,colour="red3",
+  #            vjust=1.2, fontface="italic", hjust=1) -> pa
   if(!is.null(flag.years)) pa <- pa+
-    geom_point(data=wd %>% subset(year %in% flag.years), shape=18, size=4, colour="red2")
+    geom_point(data=wd %>% subset(year %in% flag.years), shape=flag.shape, size=flag.size*1.2, colour="white")+
+    geom_point(data=wd %>% subset(year %in% flag.years), shape=flag.shape, size=flag.size, colour=flag.colour)+
+    ggrepel::geom_text_repel(data=wd %>% subset(  year %in% flag.years),
+                             aes(label=years),colour=flag.colour,
+                             fontface = 'bold',
+                             nudge_y =  ifelse(wd$bp[wd$year>=2008] > 1. , 1, -.6),
+                             nudge_x =  ifelse(wd$bp[wd$year>=2008] > 1. , -.5, .35),
+                             force=30,
+                             max.iter = 1e3,
+                             size=5, show.legend = F)
+
+
+  if (labels) pa <- pa+  geom_point(data=subset( wd.decade, decade !="70's"), size=11, aes(colour="black"), shape=21, fill="white",alpha=.5) +
+    geom_text(data=subset( wd.decade,decade !="70's") ,aes(label=decade),colour="black", hjust=0.5, vjust=.5, show.legend = F)
+
 
   bp.t$data %>% subset(year>1980) %>% ggplot(aes(year, value)) +geom_line()+
     geom_hline(yintercept =bp.t$data$value[bp.t$data$year==2005],linetype=2, size=.2)+
@@ -251,8 +343,10 @@ plot_IMF_BP <- function(my.country = "World",
              size=3,colour="black",
              vjust=-.3, fontface="italic", hjust=1) ->pb
 
-#  return(gridExtra::grid.arrange(pa,pb, ncol=1, heights=2:1))
-return(list(p1=pa, p2=pb))
+  #  return(gridExtra::grid.arrange(pa,pb, ncol=1, heights=2:1))
+  return(list(p1=pa, p2=pb))
+
+
   # geom_segment(
   #   aes(x = 2.5, y = -1.5, xend =2.5, yend =-3.25),
   #   arrow = arrow(length = unit(0.03, "npc"),
@@ -279,9 +373,9 @@ return(list(p1=pa, p2=pb))
 #' @export
 #'
 #' @examples
-Paris<- function(  country="Australia", year=c(2005,2017), percent=c(26,28), total=FALSE) {
+Paris<- function(  country="Australia", year=c(2005,2018), percent=c(26,28), total=FALSE) {
 
-  df <- BP_all(sheet=57, countries=country, years=year[1]:year[2])$data
+  df <- BP_all(sheet=65, countries=country, years=year[1]:year[2])$data
   current= tail(df$value, 1)
   target= df$value[1] * (1- percent/100)
   reductions = tail(df$value,1) - target
@@ -302,7 +396,9 @@ Paris<- function(  country="Australia", year=c(2005,2017), percent=c(26,28), tot
 #' @examples
 BP2018_download <- function(local.path=NULL,
                             folder="BP",
-                            remote.url = "https://www.bp.com/content/dam/bp/en/corporate/excel/energy-economics/statistical-review/bp-stats-review-2018-all-data.xlsx"
+                            remote.url =
+                              "https://www.bp.com/content/dam/bp/business-sites/en/global/corporate/xlsx/energy-economics/statistical-review/bp-stats-review-2019-all-data.xlsx"
+  #https://www.bp.com/content/dam/bp/en/corporate/excel/energy-economics/statistical-review/bp-stats-review-2018-all-data.xlsx"
 ){
    local.path=reproscir::validate_directory(local.path, folder=folder)
   if (!dir.exists(local.path)) dir.create(local.path, recursive=TRUE)
@@ -326,7 +422,7 @@ BP2018_download <- function(local.path=NULL,
 IMF2018_download <- function(local.path=NULL,
                             folder="IMF",
                             world=FALSE,
-                            remote.url = "https://www.imf.org/external/pubs/ft/weo/2018/01/weodata/WEOApr2018all.xls"
+                            remote.url = "https://www.imf.org/external/pubs/ft/weo/2019/01/weodata/WEOApr2019all.xls"
 ){
  if (world==TRUE) remote.url <- stringr::str_replace(remote.url, "all.xls", "alla.xls")
    local.path=reproscir::validate_directory(local.path, folder=folder)

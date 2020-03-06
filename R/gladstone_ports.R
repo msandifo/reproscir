@@ -32,14 +32,20 @@ read_gladstone_ports<- function(year=NULL,
   message(paste(fuel,  month.abb[month], year))
   url<-paste0("http://content1.gpcl.com.au/viewcontent/CargoComparisonsSelection/CargoOriginDestination.aspx?View=C&Durat=M&Key=",yearmonth)
   wg <- rvest::html_session(url )
-  batches <- read_html(wg) %>%
+  batches <- xml2::read_html(wg) %>%
     rvest::html_nodes("#MainContent_pnlResults")   #class(batches)
   table <- batches %>%
     rvest::html_nodes("td") %>%
     rvest::html_text()
   lng.ind <- which( table==fuel)
   t.ind <-which(stringr::str_detect(table,country))
+  total.ind <-which(stringr::str_detect(table,"Total"))
+  #print(t.ind)
   t.lng.ind  <- t.ind[t.ind>lng.ind][1]
+  total.lng.ind  <- total.ind[total.ind>lng.ind][1]
+ # print(lng.ind)
+ # print(t.lng.ind)
+  if (t.lng.ind > total.lng.ind) value=0 else
   value <- table[t.lng.ind+1] %>% stringr::str_replace_all(",","") %>%as.numeric()
   mdays <- lubridate::days_in_month(lubridate::ymd(paste(year,month, "01", sep="-")))
   if(country=="Total"){
@@ -93,7 +99,7 @@ read_gladstone_year <- function(years=2015:lubridate::year(Sys.Date()),
 #' @examples
 update_gladstone <- function(local.path=NULL,
                              years=2015:lubridate::year(Sys.Date()),
-                             update=T){
+                             update=T ){
   local.path=validate_directory(local.path, folder="gladstone")
   gladstone.file = paste0(local.path, "/", "lng.Rdata")
   if (!file.exists(gladstone.file)) {
@@ -101,7 +107,7 @@ update_gladstone <- function(local.path=NULL,
     save(lng, file=gladstone.file )} else load(gladstone.file)
  lng<- lng %>%  subset( !is.na(tonnes))
 
-
+day.dif = 100 #????
   if (update) {
     last.month <- lng$month
     last.year <-  lng$year

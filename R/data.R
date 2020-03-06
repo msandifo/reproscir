@@ -449,7 +449,7 @@ merge_yaml_files <-function(directory="/Volumes/data/Dropbox/msandifo/data/data.
   if (write)  {
     yaml::write_yaml(my.yaml, paste0(out.directory,name))
     if (set) Sys.setenv("R_DATAYAML"=paste0(out.directory,name) )
-    paste0(out.directory,name)}
+    return(paste0(out.directory,name))}
   else (my.yaml)
 
 }
@@ -464,6 +464,7 @@ merge_yaml_files <-function(directory="/Volumes/data/Dropbox/msandifo/data/data.
 #' @param outname
 #' @param filter
 #' @param data.sets
+#' @param setenv  bool flag to reset Sys.setenv(R_DATAYAML= outname|tempname
 #'
 #' @return
 #' @export
@@ -472,17 +473,20 @@ merge_yaml_files <-function(directory="/Volumes/data/Dropbox/msandifo/data/data.
 ms_yaml_setup<-function(tmpname="temp.yaml" ,
                         outname=NA,
                         filter=c("eia" ),
-                        data.sets = NA
+                        data.sets = NA,
+                        setenv=TRUE
 ){
   if (!is.na(outname) & file.exists(dirname(outname))){
-    reproscir::merge_yaml_files( filter=filter, name=tmpname)
+    tmpdir <-reproscir::merge_yaml_files( filter=filter, name=tmpname)
     #reproscir::list_data_sets()
     #Sys.setenv(R_DATAYAML= "~/Dropbox/msandifo/data/data1.yaml")
     # o.datayaml<-Sys.getenv("R_DATAYAML")
-    my.yaml<-yaml::yaml.load_file(Sys.getenv("R_DATAYAML"))
-    if(!is.na(data.sets)) {my.data.yaml <- purrr::map(data.sets, reproscir::get_yaml, my.yaml=my.yaml)
+     my.yaml<-yaml::yaml.load_file(Sys.getenv("R_DATAYAML"))
+     if (setenv) {if(is.na(outname))  Sys.setenv(R_DATAYAML= tmpdir) else Sys.setenv(R_DATAYAML= outname)}
+     if(!is.na(data.sets)) {my.data.yaml <- purrr::map(data.sets, reproscir::get_yaml, my.yaml=my.yaml)
     yaml::write_yaml(my.data.yaml, outname)} else  yaml::write_yaml(my.yaml,outname)
 
   } else message("need to provide valid outdirectroy  in outname")
-}
+ }
+
 

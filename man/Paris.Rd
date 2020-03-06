@@ -4,7 +4,7 @@
 \alias{Paris}
 \title{Title}
 \usage{
-Paris(country = "Australia", year = c(2005, 2017), percent = c(26,
+Paris(country = "Australia", year = c(2005, 2018), percent = c(26,
   28), total = FALSE)
 }
 \arguments{

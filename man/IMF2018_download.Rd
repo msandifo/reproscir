@@ -5,7 +5,7 @@
 \title{Title}
 \usage{
 IMF2018_download(local.path = NULL, folder = "IMF", world = FALSE,
-  remote.url = "https://www.imf.org/external/pubs/ft/weo/2018/01/weodata/WEOApr2018all.xls")
+  remote.url = "https://www.imf.org/external/pubs/ft/weo/2019/01/weodata/WEOApr2019all.xls")
 }
 \arguments{
 \item{remote.url}{}
