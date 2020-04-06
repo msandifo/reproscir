@@ -9,6 +9,9 @@ add_groups(this.df, groups, ...)
 \arguments{
 \item{col}{}
 }
+\value{
+
+}
 \description{
 Title
 }

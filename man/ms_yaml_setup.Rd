@@ -4,11 +4,19 @@
 \alias{ms_yaml_setup}
 \title{for msandifo ste up allows copying releavant yaml fiels to another directory with filter}
 \usage{
-ms_yaml_setup(tmpname = "temp.yaml", outname = NA, filter = c("eia"),
-  data.sets = NA, setenv = TRUE)
+ms_yaml_setup(
+  tmpname = "temp.yaml",
+  outname = NA,
+  filter = c("eia"),
+  data.sets = NA,
+  setenv = TRUE
+)
 }
 \arguments{
 \item{setenv}{bool flag to reset Sys.setenv(R_DATAYAML= outname|tempname}
+}
+\value{
+
 }
 \description{
 for msandifo ste up allows copying releavant yaml fiels to another directory with filter

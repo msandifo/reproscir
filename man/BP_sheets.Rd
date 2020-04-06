@@ -9,6 +9,9 @@ BP_sheets(filename = BP2018_download(), search = NULL, and = T)
 \arguments{
 \item{and}{bool - for multiple search strings defaults to TRUE}
 }
+\value{
+
+}
 \description{
 returns sheets in BP file
 }

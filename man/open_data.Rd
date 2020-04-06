@@ -9,6 +9,9 @@ open_data(data.set = "cdiac", yaml = Sys.getenv("R_DATAYAML"))
 \arguments{
 \item{yaml}{}
 }
+\value{
+
+}
 \description{
 Title
 }

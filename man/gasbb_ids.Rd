@@ -4,11 +4,13 @@
 \alias{gasbb_ids}
 \title{Title retrieves gasbb  plantypes from AEMO facility file}
 \usage{
-gasbb_ids(planttype = "PROD",
-  gasbb.facility.file = "./data/facility.Rdata")
+gasbb_ids(planttype = "PROD", gasbb.facility.file = "./data/facility.Rdata")
 }
 \arguments{
 \item{gasbb.facility.file}{location}
+}
+\value{
+
 }
 \description{
 Title retrieves gasbb  plantypes from AEMO facility file

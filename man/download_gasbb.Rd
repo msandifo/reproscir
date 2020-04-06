@@ -9,6 +9,9 @@ download_gasbb(local.path = NULL)
 \arguments{
 \item{local.path}{}
 }
+\value{
+
+}
 \description{
 Title
 }

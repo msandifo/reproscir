@@ -9,6 +9,9 @@ downloads_template(name)
 \arguments{
 \item{name}{}
 }
+\value{
+
+}
 \description{
 Title
 }

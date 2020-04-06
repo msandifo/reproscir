@@ -4,11 +4,18 @@
 \alias{read_aemo_aggregated}
 \title{Title}
 \usage{
-read_aemo_aggregated(local.path = NULL, state = "NSW", files = NULL,
-  folder = "aemo")
+read_aemo_aggregated(
+  local.path = NULL,
+  state = "NSW",
+  files = NULL,
+  folder = "aemo"
+)
 }
 \arguments{
 \item{files}{}
+}
+\value{
+
 }
 \description{
 Title

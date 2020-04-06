@@ -4,12 +4,20 @@
 \alias{download_aemo_aggregated}
 \title{Title}
 \usage{
-download_aemo_aggregated(states = c("NSW", "QLD", "SA", "TAS", "VIC"),
+download_aemo_aggregated(
+  states = c("NSW", "QLD", "SA", "TAS", "VIC"),
   remote.path = "http://www.nemweb.com.au/mms.GRAPHS/data/",
-  local.path = NULL, months = NA, verbose = F, years = NA)
+  local.path = NULL,
+  months = NA,
+  verbose = F,
+  years = NA
+)
 }
 \arguments{
 \item{years}{}
+}
+\value{
+
 }
 \description{
 Title

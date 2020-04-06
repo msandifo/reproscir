@@ -4,8 +4,7 @@
 \alias{set_yaml_link}
 \title{set_yaml_link}
 \usage{
-set_yaml_link(update, data.set = "eia.drygas",
-  yaml = Sys.getenv("R_DATAYAML"))
+set_yaml_link(update, data.set = "eia.drygas", yaml = Sys.getenv("R_DATAYAML"))
 }
 \arguments{
 \item{update}{new link}

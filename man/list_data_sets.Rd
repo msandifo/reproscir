@@ -4,11 +4,13 @@
 \alias{list_data_sets}
 \title{returns all listed data.sets in yaml file}
 \usage{
-list_data_sets(yaml = Sys.getenv("R_DATAYAML"), items = NA,
-  select = NULL)
+list_data_sets(yaml = Sys.getenv("R_DATAYAML"), items = NA, select = NULL)
 }
 \arguments{
 \item{select}{}
+}
+\value{
+
 }
 \description{
 returns all listed data.sets in yaml file

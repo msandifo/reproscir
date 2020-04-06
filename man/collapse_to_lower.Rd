@@ -9,6 +9,9 @@ collapse_to_lower(name, collapse = ".", drop = 1, remove = "-")
 \arguments{
 \item{remove}{}
 }
+\value{
+
+}
 \description{
 Title
 }

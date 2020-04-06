@@ -4,11 +4,17 @@
 \alias{read_gladstone_year}
 \title{Title}
 \usage{
-read_gladstone_year(years = 2015:lubridate::year(Sys.Date()),
-  fuel = "Liquefied Natural Gas", country = "Total")
+read_gladstone_year(
+  years = 2015:lubridate::year(Sys.Date()),
+  fuel = "Liquefied Natural Gas",
+  country = "Total"
+)
 }
 \arguments{
 \item{country}{}
+}
+\value{
+
 }
 \description{
 Title

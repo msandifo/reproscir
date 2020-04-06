@@ -4,11 +4,18 @@
 \alias{write_script}
 \title{writes out download as bash shell script}
 \usage{
-write_script(data.set = "cdiac", script = paste0(data.set, "_get.sh"),
-  yaml = Sys.getenv("R_DATAYAML"), verbose = T)
+write_script(
+  data.set = "cdiac",
+  script = paste0(data.set, "_get.sh"),
+  yaml = Sys.getenv("R_DATAYAML"),
+  verbose = T
+)
 }
 \arguments{
 \item{verbose}{}
+}
+\value{
+
 }
 \description{
 writes out download as bash shell script

@@ -9,6 +9,9 @@ group_gasbb(df, zone = "Roma", flowdirection = "DELIVERY")
 \arguments{
 \item{zone}{}
 }
+\value{
+
+}
 \description{
 Title
 }

@@ -9,6 +9,9 @@ read_gasbb(file.name)
 \arguments{
 \item{file.name}{}
 }
+\value{
+
+}
 \description{
 Title
 }

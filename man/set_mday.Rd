@@ -9,6 +9,9 @@ set_mday(cdate, day = 15)
 \arguments{
 \item{day}{}
 }
+\value{
+
+}
 \description{
 Title
 }

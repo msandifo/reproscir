@@ -4,11 +4,13 @@
 \alias{open_YAML}
 \title{Title}
 \usage{
-open_YAML(fn = Sys.getenv("R_DATAYAML"),
-  editor = Sys.getenv("R_EDITOR"))
+open_YAML(fn = Sys.getenv("R_DATAYAML"), editor = Sys.getenv("R_EDITOR"))
 }
 \arguments{
 \item{editor}{}
+}
+\value{
+
 }
 \description{
 Title

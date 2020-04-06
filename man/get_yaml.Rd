@@ -9,6 +9,9 @@ get_yaml(data.set, my.yaml)
 \arguments{
 \item{my.yaml}{}
 }
+\value{
+
+}
 \description{
 Title
 }

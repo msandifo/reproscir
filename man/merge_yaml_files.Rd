@@ -4,14 +4,21 @@
 \alias{merge_yaml_files}
 \title{Title}
 \usage{
-
-  merge_yaml_files(directory = "/Volumes/data/Dropbox/msandifo/data/data.yaml.configs",
+merge_yaml_files(
+  directory = "/Volumes/data/Dropbox/msandifo/data/data.yaml.configs",
   out.directory = "/Volumes/data/Dropbox/msandifo/data/",
-  name = "datax.yaml", set = T, write = T, filter = NA,
-  verbose = T)
+  name = "datax.yaml",
+  set = T,
+  write = T,
+  filter = NA,
+  verbose = T
+)
 }
 \arguments{
 \item{verbose}{}
+}
+\value{
+
 }
 \description{
 Title

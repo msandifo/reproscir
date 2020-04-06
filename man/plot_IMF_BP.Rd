@@ -4,13 +4,27 @@
 \alias{plot_IMF_BP}
 \title{Title}
 \usage{
-plot_IMF_BP(df = NA, my.country = "World", measure = "NGDPRPPPPC",
-  years = 1965:2018, sheet = 65, flag.years = NULL, percent = T,
-  labels = T, repel = T, flag.colour = "firebrick3", flag.size = 5,
-  flag.shape = 18, group = NULL)
+plot_IMF_BP(
+  df = NA,
+  my.country = "World",
+  measure = "NGDPRPPPPC",
+  years = 1965:2018,
+  sheet = 65,
+  flag.years = NULL,
+  percent = T,
+  labels = T,
+  repel = T,
+  flag.colour = "firebrick3",
+  flag.size = 5,
+  flag.shape = 18,
+  group = NULL
+)
 }
 \arguments{
 \item{measure}{}
+}
+\value{
+
 }
 \description{
 Title

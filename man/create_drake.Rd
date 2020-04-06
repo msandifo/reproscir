@@ -4,12 +4,17 @@
 \alias{create_drake}
 \title{Title}
 \usage{
-create_drake(name = "000",
+create_drake(
+  name = "000",
   directory = "/Volumes/data/Dropbox/msandifo/documents/programming/r/2018/drake/",
-  remove = F)
+  remove = F
+)
 }
 \arguments{
 \item{remove}{}
+}
+\value{
+
 }
 \description{
 Title

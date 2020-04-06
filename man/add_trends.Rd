@@ -9,6 +9,9 @@ add_trends(df, index = 3, order = 12, centre = T)
 \arguments{
 \item{centre}{}
 }
+\value{
+
+}
 \description{
 Title
 }

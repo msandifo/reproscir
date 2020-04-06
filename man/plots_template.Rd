@@ -9,6 +9,9 @@ plots_template(...)
 \arguments{
 \item{...}{}
 }
+\value{
+
+}
 \description{
 Title
 }

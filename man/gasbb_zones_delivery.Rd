@@ -4,11 +4,17 @@
 \alias{gasbb_zones_delivery}
 \title{Title}
 \usage{
-gasbb_zones_delivery(gasbb.prod, zones = c("Roma", "Moomba", "Gippsland",
-  "Port Campbell", "Ballera", "Victoria", "Sydney"))
+gasbb_zones_delivery(
+  gasbb.prod,
+  zones = c("Roma", "Moomba", "Gippsland", "Port Campbell", "Ballera", "Victoria",
+    "Sydney")
+)
 }
 \arguments{
 \item{zones}{}
+}
+\value{
+
 }
 \description{
 Title

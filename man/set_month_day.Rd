@@ -11,6 +11,9 @@ set_month_day(date, day = 15)
 
 \item{day}{numeric}
 }
+\value{
+
+}
 \description{
 sets  day of month in date to day
 }

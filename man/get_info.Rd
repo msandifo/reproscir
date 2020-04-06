@@ -9,6 +9,9 @@ get_info(data.set = "cdiac", yaml = Sys.getenv("R_DATAYAML"))
 \arguments{
 \item{yaml}{}
 }
+\value{
+
+}
 \description{
 returns information for sepcified data set
 }

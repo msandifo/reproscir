@@ -6,6 +6,9 @@
 \usage{
 theme_twitter()
 }
+\value{
+
+}
 \description{
 Title
 }

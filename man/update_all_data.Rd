@@ -9,6 +9,9 @@ update_all_data(yaml = Sys.getenv("R_DATAYAML"), items = NA)
 \arguments{
 \item{items}{}
 }
+\value{
+
+}
 \description{
 updtses all data sets in yaml file
 }

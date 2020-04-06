@@ -9,6 +9,9 @@ project_cagr(df, gr = NA, n = 40)
 \arguments{
 \item{n}{}
 }
+\value{
+
+}
 \description{
 Title
 }

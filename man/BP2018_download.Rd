@@ -4,8 +4,12 @@
 \alias{BP2018_download}
 \title{tests for existence and, if not, retreives bp-stats-review-2018-all-data.xlsx}
 \usage{
-BP2018_download(local.path = NULL, folder = "BP",
-  remote.url = "https://www.bp.com/content/dam/bp/business-sites/en/global/corporate/xlsx/energy-economics/statistical-review/bp-stats-review-2019-all-data.xlsx")
+BP2018_download(
+  local.path = NULL,
+  folder = "BP",
+ 
+    remote.url = "https://www.bp.com/content/dam/bp/business-sites/en/global/corporate/xlsx/energy-economics/statistical-review/bp-stats-review-2019-all-data.xlsx"
+)
 }
 \arguments{
 \item{local.path}{to directory whcih will hold eht folder and file defaults to cache (on osx ~/Library/Caches)}

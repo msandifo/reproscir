@@ -4,11 +4,18 @@
 \alias{read_gladstone_ports}
 \title{Title}
 \usage{
-read_gladstone_ports(year = NULL, month = NULL,
-  fuel = "Liquefied Natural Gas", country = "Total")
+read_gladstone_ports(
+  year = NULL,
+  month = NULL,
+  fuel = "Liquefied Natural Gas",
+  country = "Total"
+)
 }
 \arguments{
 \item{country}{}
+}
+\value{
+
 }
 \description{
 Title

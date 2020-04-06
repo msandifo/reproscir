@@ -4,12 +4,17 @@
 \alias{download_aemo_current}
 \title{Title}
 \usage{
-download_aemo_current(states = c("NSW", "QLD", "SA", "TAS", "VIC"),
+download_aemo_current(
+  states = c("NSW", "QLD", "SA", "TAS", "VIC"),
   remote.path = "http://www.nemweb.com.au/mms.GRAPHS/DATA/",
-  local.path = NULL)
+  local.path = NULL
+)
 }
 \arguments{
 \item{local.path}{}
+}
+\value{
+
 }
 \description{
 Title

@@ -4,11 +4,20 @@
 \alias{get_IMF_BP}
 \title{Title}
 \usage{
-get_IMF_BP(my.country = "World", measure = "NGDPRPPPPC",
-  years = 1965:2018, sheet = 65, flag.years = NULL, percent = T)
+get_IMF_BP(
+  my.country = "World",
+  measure = "NGDPRPPPPC",
+  years = 1965:2018,
+  sheet = 65,
+  flag.years = NULL,
+  percent = T
+)
 }
 \arguments{
 \item{percent}{}
+}
+\value{
+
 }
 \description{
 Title

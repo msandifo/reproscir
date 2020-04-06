@@ -9,6 +9,9 @@ validate_directory(destination_directory, folder = "aemo")
 \arguments{
 \item{folder}{}
 }
+\value{
+
+}
 \description{
 copied directly from smapr
 }

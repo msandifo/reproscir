@@ -4,11 +4,13 @@
 \alias{replace_yaml_dir}
 \title{Title}
 \usage{
-replace_yaml_dir(my.data.yaml, directory = paste(getwd(), "data", sep =
-  "/"))
+replace_yaml_dir(my.data.yaml, directory = paste(getwd(), "data", sep = "/"))
 }
 \arguments{
 \item{directory}{}
+}
+\value{
+
 }
 \description{
 Title

@@ -13,6 +13,9 @@ get_breaks(df, Q = 16, minseg = 12, method = "BinSeg")
 
 \item{method}{Choice of "AMOC", "PELT", "SegNeigh" or "BinSeg", see changepoint::cpt.mean}
 }
+\value{
+
+}
 \description{
 gets changepoints from sequence  trend
 }

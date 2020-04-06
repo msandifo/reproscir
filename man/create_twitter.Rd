@@ -4,12 +4,17 @@
 \alias{create_twitter}
 \title{Title}
 \usage{
-create_twitter(name = "000",
+create_twitter(
+  name = "000",
   directory = "/Volumes/data/Dropbox/msandifo/documents/programming/r/twitter/2018/",
-  remove = F)
+  remove = F
+)
 }
 \arguments{
 \item{remove}{}
+}
+\value{
+
 }
 \description{
 Title

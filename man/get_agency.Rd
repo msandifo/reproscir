@@ -4,11 +4,17 @@
 \alias{get_agency}
 \title{return  agency for given data set}
 \usage{
-get_agency(data.set = "cdiac", yaml = Sys.getenv("R_DATAYAML"),
-  prepend = "data sourced from")
+get_agency(
+  data.set = "cdiac",
+  yaml = Sys.getenv("R_DATAYAML"),
+  prepend = "data sourced from"
+)
 }
 \arguments{
 \item{prepend}{}
+}
+\value{
+
 }
 \description{
 return  agency for given data set

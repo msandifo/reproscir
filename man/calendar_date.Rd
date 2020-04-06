@@ -9,6 +9,9 @@ calendar_date(ddate, day = NA)
 \arguments{
 \item{day}{}
 }
+\value{
+
+}
 \description{
 Title
 }

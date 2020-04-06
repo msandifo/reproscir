@@ -9,6 +9,9 @@ lng_tm_to_tjd(n, date)
 \arguments{
 \item{date}{}
 }
+\value{
+
+}
 \description{
 conversion from lng tonnes per month to TJ per day
 }
