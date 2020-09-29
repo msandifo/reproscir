@@ -9,7 +9,7 @@ Sys.open(fn = "~/.Renviron", editor = Sys.getenv("R_EDITOR"))
 \arguments{
 \item{fn}{filname}
 
-\item{editor}{as set by "R_EDITOR envirnemtn variable as set in .R}
+\item{editor}{as set by "R_EDITOR envirnment variable as set in .R}
 }
 \value{
 side effect is open a

@@ -2,16 +2,19 @@
 % Please edit documentation in R/data.R
 \name{RS_open}
 \alias{RS_open}
-\title{Title}
+\title{opens a file in RStudio}
 \usage{
-RS_open(fn)
+RS_open(fn = Sys.getenv("R_DATAYAML"))
 }
 \arguments{
-\item{fn}{}
+\item{fn}{defults to Sys.getenv("R_DATAYAML")}
 }
 \value{
 
 }
 \description{
-Title
+opens a file in RStudio
+}
+\examples{
+RS_open(Sys.getenv("R_DATAYAML"))
 }

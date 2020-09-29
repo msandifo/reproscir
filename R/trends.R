@@ -29,16 +29,7 @@ get_breaks <- function(df , Q = 16, minseg = 12, method="BinSeg"){
   my.dates}
 
 
-#' Title
-#'
-#' @param df
-#' @param groups
-#' @param col
-#'
-#' @return
-#' @export
-#'
-#' @examples
+
 # add_groups<-function(df, groups, col="date"){
 #
 #   groups<- groups[order(groups)]
@@ -55,21 +46,31 @@ get_breaks <- function(df , Q = 16, minseg = 12, method="BinSeg"){
 # }
 
 
-add_groups<-function(this.df,  groups, ...){
+#' Title
+#'
+#' @param groups
+#' @param ...
+#' @param df
+#'
+#' @return
+#' @export
+#'
+#' @examples
+add_groups<-function(df,  groups, ...){
   groups<-   groups[order(groups)]
-  my.vec <-  eval(substitute(...), this.df, parent.frame())
+  my.vec <-  eval(substitute(...), df, parent.frame())
   if  (class(my.vec) !=class(groups)) {
     print( paste0("NOTE: class of groups (",class(groups),") and ", substitute(...), " (", class(my.vec),") differ"))
     print("      only one `group` returned")
-    this.df$group <- "1"
+    df$group <- "1"
   } else{
 
-    this.df$group <- "1"
+    df$group <- "1"
     for (i in 2:(length(groups)+1))
-      this.df$group[my.vec > groups[i-1]] <-as.character(i)
+      df$group[my.vec > groups[i-1]] <-as.character(i)
 
   }
-  return(this.df)
+  return(df)
 }
 
 #' Title
@@ -105,6 +106,18 @@ get_data_trends <- function(my.data.source ){
 
 
 
+#' Title
+#'
+#' @param my.data
+#' @param ...
+#' @param nq
+#' @param minseg
+#' @param top
+#'
+#' @return
+#' @export
+#'
+#' @examples
 get_changepoints<- function(my.data, ..., nq = 40 ,   minseg = 12,top=12){
   e <- eval(substitute(...), my.data, parent.frame())
   # e.narm <- e #[!is.na(e)] #remove NA's
@@ -122,6 +135,17 @@ get_changepoints<- function(my.data, ..., nq = 40 ,   minseg = 12,top=12){
   return(my.cpts.inds)
 }
 
+#' Title
+#'
+#' @param my.df
+#' @param my.dates
+#' @param my.ranges
+#' @param ...
+#'
+#' @return
+#' @export
+#'
+#' @examples
 group_summary <- function(my.df=my.x, my.dates, my.ranges, ... ){
 
   add_groups(as.data.frame(my.df), my.dates,  ...) %>%
@@ -169,6 +193,16 @@ plot_cpts_group <-function(my.data, title=c("Mace head", "US gas"),my.date=m.dat
 }
 
 
+#' Title
+#'
+#' @param my.lag
+#' @param df
+#' @param r
+#'
+#' @return
+#' @export
+#'
+#' @examples
 lag_x <- function(my.lag=0,  df=my.x.y.spread,r=T){
   names(df) <-c("date", "data1", "data2","grouping")
   # print(names(df))
@@ -184,6 +218,16 @@ lag_x <- function(my.lag=0,  df=my.x.y.spread,r=T){
 }
 
 
+#' Title
+#'
+#' @param my.lags
+#' @param df
+#' @param gather
+#'
+#' @return
+#' @export
+#'
+#' @examples
 lag_x_i <- function(my.lags, df=my.x.y.spread, gather=T){
   lagged.df <-   map(my.lags,df=df, lag_x, r=T) %>%
     reduce(rbind) %>%

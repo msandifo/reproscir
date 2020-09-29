@@ -2,7 +2,7 @@
 % Please edit documentation in R/data.R
 \name{ms_yaml_setup}
 \alias{ms_yaml_setup}
-\title{for msandifo ste up allows copying releavant yaml fiels to another directory with filter}
+\title{for msandifo sete up allows copying releavant yaml field to another directory with filter}
 \usage{
 ms_yaml_setup(
   tmpname = "temp.yaml",
@@ -13,11 +13,11 @@ ms_yaml_setup(
 )
 }
 \arguments{
-\item{setenv}{bool flag to reset Sys.setenv(R_DATAYAML= outname|tempname}
+\item{setenv}{bool flag to reset Sys.setenv(R_DATAYAML= outname|tempname)}
 }
 \value{
 
 }
 \description{
-for msandifo ste up allows copying releavant yaml fiels to another directory with filter
+for msandifo sete up allows copying releavant yaml field to another directory with filter
 }

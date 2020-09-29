@@ -1,3 +1,21 @@
+#' Title
+#'
+#' @param sep
+#' @param s
+#'
+#' @return
+#' @export
+#'
+#' @examples
+split_name <- function(s, rep="\\." , sep=" "){
+  s %>%
+      stringr::str_replace_all(rep, sep) %>%
+      stringr::str_squish()%>%
+      stringr:: str_to_title()
+}
+
+
+`%ni%` <-Negate(`%in%`)
 
 #' copied directly from smapr
 #'

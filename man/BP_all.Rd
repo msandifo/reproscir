@@ -5,10 +5,10 @@
 \title{Title}
 \usage{
 BP_all(
-  filename = BP2018_download(),
+  filename = BP2020_download(),
   sheet = 32,
   countries = NA,
-  years = 1965:2018,
+  years = 1965:2019,
   na.rm = TRUE,
   verbose = F,
   data = FALSE,

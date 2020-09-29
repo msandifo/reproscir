@@ -10,7 +10,7 @@
 #' @export
 #'
 #' @examples
-BP_sheets <- function( filename=BP2018_download(), search=NULL , and=T){
+BP_sheets <- function( filename=BP2020_download(), search=NULL , and=T){
 
   if (is.character(search[1])) search <- stringr::str_to_lower(search)
   if (is.character(search[1])) print(paste(search, collapse = '.*'))
@@ -40,10 +40,10 @@ BP_sheets <- function( filename=BP2018_download(), search=NULL , and=T){
 #' BP_all( sheet=., count=c("Aus", "Ven", "Russ", "US", "Sau")))$data %>%
 #' ggplot(aes(year, value, col=region))+
 #' geom_line()
-BP_all <- function( filename=BP2018_download(),
+BP_all <- function( filename=BP2020_download(),
                     sheet=32,
                     countries=NA,
-                    years=1965:2018,
+                    years=1965:2019,
                     na.rm=TRUE,
                     verbose=F,
                     data=FALSE,
@@ -384,17 +384,17 @@ Paris<- function(  country="Australia", year=c(2005,2018), percent=c(26,28), tot
   if (total) return(target) else return( cagr)
 }
 
-#' tests for existence and, if not, retreives bp-stats-review-2018-all-data.xlsx
+#' tests for existence and, if not, retrieves bp-stats-review-2019-all-data.xlsx
 #'
-#' @param local.path  to directory whcih will hold eht folder and file defaults to cache (on osx ~/Library/Caches)
+#' @param local.path  to directory which will hold eht folder and file defaults to cache (on osx ~/Library/Caches)
 #' @param folder  to hold file in local.path
-#' @param remote.url url of BP stats review, ciurrnely defaults to 2018
+#' @param remote.url url of BP stats review, currently defaults to 2019
 #'
 #' @return  string full path to local copy
 #' @export
 #'
 #' @examples
-BP2018_download <- function(local.path=NULL,
+BP2019_download <- function(local.path=NULL,
                             folder="BP",
                             remote.url =
                               "https://www.bp.com/content/dam/bp/business-sites/en/global/corporate/xlsx/energy-economics/statistical-review/bp-stats-review-2019-all-data.xlsx"
@@ -408,6 +408,54 @@ BP2018_download <- function(local.path=NULL,
  return(local.file)
 }
 
+#' tests for existence and, if not, retrieves bp-stats-review-2020-all-data.xlsx
+#'
+#' @param local.path  to directory which will hold eht folder and file defaults to cache (on osx ~/Library/Caches)
+#' @param folder  to hold file in local.path
+#' @param remote.url url of BP stats review, currently defaults to 2019
+#'
+#' @return  string full path to local copy
+#' @export
+#'
+#' @examples
+BP2020_download <- function(local.path=NULL,
+                            folder="BP",
+                            remote.url =
+                              "https://www.bp.com/content/dam/bp/business-sites/en/global/corporate/xlsx/energy-economics/statistical-review/bp-stats-review-2020-all-data.xlsx"
+                            #https://www.bp.com/content/dam/bp/en/corporate/excel/energy-economics/statistical-review/bp-stats-review-2018-all-data.xlsx"
+){
+  local.path=reproscir::validate_directory(local.path, folder=folder)
+  if (!dir.exists(local.path)) dir.create(local.path, recursive=TRUE)
+
+  local.file <- paste0(local.path, "/" ,basename(remote.url))
+  if(!file.exists(local.file)) utils::download.file(remote.url, local.file )
+  return(local.file)
+}
+
+#' Title
+#'
+#' @param local.path
+#' @param folder
+#' @param remote.url
+#'
+#' @return
+#' @export
+#'
+#' @examples
+BP2018_download <- function(local.path=NULL,
+                            folder="BP",
+                            remote.url =
+                              "https://www.bp.com/content/dam/bp/business-sites/en/global/corporate/xlsx/energy-economics/statistical-review/bp-stats-review-2018-all-data.xlsx"
+                            #https://www.bp.com/content/dam/bp/en/corporate/excel/energy-economics/statistical-review/bp-stats-review-2018-all-data.xlsx"
+){
+  message( "nb. same as BP2019_download()")
+  local.path=reproscir::validate_directory(local.path, folder=folder)
+  if (!dir.exists(local.path)) dir.create(local.path, recursive=TRUE)
+
+  local.file <- paste0(local.path, "/" ,basename(remote.url))
+  if(!file.exists(local.file)) utils::download.file(remote.url, local.file )
+  return(local.file)
+}
 
 #' Title
 #'

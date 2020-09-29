@@ -95,7 +95,8 @@ update_data<- function(data.set="cdiac",
 #' @examples
 read_data<- function(data.set="cdiac",
                      yaml=Sys.getenv("R_DATAYAML") ,
-                     data=F , verbose=F,
+                     data=F ,
+                     verbose=F,
                      directory=NULL){
   my.yaml<- yaml::yaml.load_file(yaml)
   my.data.yaml <- rlist::list.first(my.yaml, name==data.set)
@@ -103,7 +104,7 @@ read_data<- function(data.set="cdiac",
    if(!is.null(my.data.yaml$type$units) & verbose) print(my.data.yaml$type$units)
   if (!is.null(directory) ) my.data.yaml$r <- my.data.yaml$r %>%
     stringr::str_replace_all(my.data.yaml$directory, paste0(getwd(),directory))
-print(my.data.yaml$r )
+if (verbose==TRUE) print(my.data.yaml$r )
   eval(parse(text=my.data.yaml$r))
   if (!data) {
     my.data.yaml$data=my.data
@@ -167,6 +168,24 @@ get_link <- function(data.set="cdiac",
   return(out.string)
 }
 
+#' returns link for given data.set
+#'
+#' @param data.set
+#' @param yaml
+#'
+#' @return
+#' @export
+#'
+#' @examples
+get_yaml_link <- function(data.set="cdiac",
+                     yaml=Sys.getenv("R_DATAYAML") ){
+  my.yaml<- yaml::yaml.load_file(yaml)
+  my.data.yaml <- rlist::list.first(my.yaml, name==data.set)
+  out.string <-  my.data.yaml$link
+  return(out.string)
+}
+
+
 #' returns all listed data.sets in yaml file
 #'
 #' @param yaml
@@ -207,7 +226,7 @@ update_all_data <- function(yaml=Sys.getenv("R_DATAYAML"), items=NA) {
 #' Title
 #'
 #' @param fn filname
-#' @param editor as set by "R_EDITOR envirnemtn variable as set in .R
+#' @param editor as set by "R_EDITOR envirnment variable as set in .R
 #'
 #' @return side effect is open a
 #' @export
@@ -237,15 +256,15 @@ open_YAML <- function(fn=Sys.getenv("R_DATAYAML"), editor=Sys.getenv("R_EDITOR")
 }
 
 
-#' Title
+#' opens a file in RStudio
 #'
-#' @param fn
+#' @param fn defults to Sys.getenv("R_DATAYAML")
 #'
 #' @return
 #' @export
 #'
-#' @examples
-RS_open <- function(fn){
+#' @examples RS_open(Sys.getenv("R_DATAYAML"))
+RS_open <- function(fn=Sys.getenv("R_DATAYAML")){
   file.edit(fn)
 }
 
@@ -319,6 +338,17 @@ plot_data <- function(data.set="eia.drygas",
   eval(parse(text=my.data.yaml$ggplot))
 }
 
+#' Title
+#'
+#' @param update
+#' @param data.set
+#' @param field
+#' @param yaml
+#'
+#' @return
+#' @export
+#'
+#' @examples
 set_yaml <- function(update, data.set="eia.drygas", field="link", yaml=Sys.getenv("R_DATAYAML") ){
   my.yaml<- yaml::yaml.load_file(yaml)
 
@@ -348,6 +378,19 @@ set_yaml_link<-function(update, data.set="eia.drygas",  yaml=Sys.getenv("R_DATAY
 
 }
 
+
+#' returns title for a given data set
+#'
+#' @param data.set  name of dataset
+#'
+#' @return title
+#' @export
+#'
+#' @examples
+get_name<- function(data.set ){
+  reproscir::split_name(read_data(data.set)$name)
+}
+
 #' returns title for a given data set
 #'
 #' @param data.set  name of datset
@@ -361,8 +404,17 @@ get_title<- function(data.set ){
   return(c(my.list$station$name,my.list$station$acronym, my.list$station$region))
 }
 
+#' appends a new yaml to the default yaml file, i.e. Sys.getenv("R_DATAYAML")
+#'
+#' @param name defaults to "test"
+#' @param ...
+#'
+#' @return
+#' @export
+#'
+#' @examples
 add_yaml <- function(name="test", ...){
-yaml.str<- as.yaml(list(list(name = name,
+yaml.str<- yaml::as.yaml(list(list(name = name,
                              category= '',
                              agency="",
                              link="",
@@ -454,17 +506,17 @@ merge_yaml_files <-function(directory="/Volumes/data/Dropbox/msandifo/data/data.
 
 }
 
-## probably shoudl  consider separting the functions for  the assembly and  the writing so that  changes in dirrectoy  can be applied in chains
+## probably should  consider separating the functions for  the assembly and  the writing so that  changes in dirrectoy  can be applied in chains
 
 
 
-#' for msandifo ste up allows copying releavant yaml fiels to another directory with filter
+#' for msandifo sete up allows copying releavant yaml field to another directory with filter
 #'
 #' @param tmpname
 #' @param outname
 #' @param filter
 #' @param data.sets
-#' @param setenv  bool flag to reset Sys.setenv(R_DATAYAML= outname|tempname
+#' @param setenv  bool flag to reset Sys.setenv(R_DATAYAML= outname|tempname)
 #'
 #' @return
 #' @export

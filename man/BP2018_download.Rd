@@ -2,25 +2,21 @@
 % Please edit documentation in R/bp_imf.R
 \name{BP2018_download}
 \alias{BP2018_download}
-\title{tests for existence and, if not, retreives bp-stats-review-2018-all-data.xlsx}
+\title{Title}
 \usage{
 BP2018_download(
   local.path = NULL,
   folder = "BP",
  
-    remote.url = "https://www.bp.com/content/dam/bp/business-sites/en/global/corporate/xlsx/energy-economics/statistical-review/bp-stats-review-2019-all-data.xlsx"
+    remote.url = "https://www.bp.com/content/dam/bp/business-sites/en/global/corporate/xlsx/energy-economics/statistical-review/bp-stats-review-2018-all-data.xlsx"
 )
 }
 \arguments{
-\item{local.path}{to directory whcih will hold eht folder and file defaults to cache (on osx ~/Library/Caches)}
-
-\item{folder}{to hold file in local.path}
-
-\item{remote.url}{url of BP stats review, ciurrnely defaults to 2018}
+\item{remote.url}{}
 }
 \value{
-string full path to local copy
+
 }
 \description{
-tests for existence and, if not, retreives bp-stats-review-2018-all-data.xlsx
+Title
 }

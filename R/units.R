@@ -55,6 +55,6 @@ tj2cf <- 947817.120313
 cm2bbl <-  6.2898
 
 #' @export
-syd.harbour = 562e6 # cubic metres
+syd.harbour <- 562e6 # cubic metres
 
 
